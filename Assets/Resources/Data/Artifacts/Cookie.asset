@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66bd13a2c7ed1c246a14fb79847203d1, type: 3}
+  m_Name: Cookie
+  m_EditorClassIdentifier: 
+  artifactName: Cookie
+  artifactId: cookie
+  iconSprite: {fileID: -1615012565, guid: bfbd74520fe88364c8faec981e836778, type: 3}
+  addedMaxHealth: 0
+  afterRoundHeal: 5
+  afterKillHeal: 0
+  healPriceFactor: 1
+  healAmountFactor: 1

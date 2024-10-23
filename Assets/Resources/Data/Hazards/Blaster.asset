@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 659cfb316e6e0784d89419f7d1e4c4b2, type: 3}
+  m_Name: Blaster
+  m_EditorClassIdentifier: 
+  hazardName: Blaster
+  hazardId: blaster
+  iconSprite: {fileID: -2413806693520163455, guid: c75b306f51a971c458ca6e184c2944d7, type: 3}
+  bulletPrefab: {fileID: 1149145475124471157, guid: 0a66bbf44eae624469b5dd6358b32126, type: 3}
+  indicatorPrefab: {fileID: 1878340698160527050, guid: a736414c8892b3e4e9fea75eb5c4c5ba, type: 3}
+  speed:
+  - 3
+  - 4
+  - 5
+  radius:
+  - 0.2
+  - 0.3
+  - 0.4
+  follow:
+  - 0
+  - 0
+  - 0
+  speedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.33333334
+      outSlope: -0.33333334
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 3
+      value: 0
+      inSlope: -0.33333334
+      outSlope: -0.33333334
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  radiusCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.006659284
+      outSlope: -0.006659284
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.29989508
+    - serializedVersion: 3
+      time: 4.723874
+      value: 0.5050735
+      inSlope: -0.32143754
+      outSlope: -0.32143754
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07826364
+      outWeight: 1
+    - serializedVersion: 3
+      time: 5
+      value: 0
+      inSlope: -2.0754716
+      outSlope: -2.0754716
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22634602
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  followCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  damage: 010000000200000003000000
+  spawnFrequency:
+  - 2
+  - 1.8
+  - 1.5
+  maxLifetime:
+  - 5
+  - 5
+  - 5
+  spawnFrequencyVariance: 0
+  speedVariance: 0
+  radiusVariance: 0
