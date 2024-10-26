@@ -555,6 +555,7 @@ Transform:
   - {fileID: 1910593754}
   - {fileID: 545746475}
   - {fileID: 1865719191}
+  - {fileID: 738228717}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &623622131
@@ -571,6 +572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minCorner: {fileID: 1910593754}
   maxCorner: {fileID: 545746475}
+  bulletContainer: {fileID: 738228717}
   player: {fileID: 1957741396}
   topFight: {fileID: 538272951}
   hazardRegistry: {fileID: 11400000, guid: 623e121b5cf2054418547ef8250a8316, type: 2}
@@ -593,6 +595,37 @@ MonoBehaviour:
   goldRadius: 0.2
   maxGoldCount: 3
   collectGoldSound: {fileID: 8300000, guid: 21aad3a3d597e4d4d86456177db2bb6f, type: 3}
+--- !u!1 &738228716
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 738228717}
+  m_Layer: 0
+  m_Name: Bullets
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &738228717
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738228716}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 623622130}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &763948806
 GameObject:
   m_ObjectHideFlags: 0

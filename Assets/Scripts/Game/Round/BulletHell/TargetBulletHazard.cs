@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Tweenables;
 using UnityEngine;
 
-public class GenericBulletHazard : IHazard
+public class TargetBulletHazard : IHazard
 {
-    private readonly GenericBullet bulletPrefab;
+    private readonly ProjectileObject bulletPrefab;
     private readonly GameObject indicatorPrefab;
 
     private readonly Curves curves;
@@ -25,6 +25,18 @@ public class GenericBulletHazard : IHazard
         public int[] damage;
         public float[] spawnFrequency;
         public float[] maxLifetime;
+        public Color bulletColor;
+
+        public Settings(float[] speed, float[] radius, float[] follow, int[] damage, float[] spawnFrequency, float[] maxLifetime, Color bulletColor)
+        {
+            this.speed = speed;
+            this.radius = radius;
+            this.follow = follow;
+            this.damage = damage;
+            this.spawnFrequency = spawnFrequency;
+            this.maxLifetime = maxLifetime;
+            this.bulletColor = bulletColor;
+        }
     }
 
     public struct Curves
@@ -32,6 +44,13 @@ public class GenericBulletHazard : IHazard
         public AnimationCurve speed;
         public AnimationCurve radius;
         public AnimationCurve follow;
+
+        public Curves(AnimationCurve speed, AnimationCurve radius, AnimationCurve follow)
+        {
+            this.speed = speed;
+            this.radius = radius;
+            this.follow = follow;
+        }
     }
 
     public struct Variances
@@ -39,15 +58,28 @@ public class GenericBulletHazard : IHazard
         public float speedVariance;
         public float radiusVariance;
         public float spawnFrequencyVariance;
+
+        public Variances(float speedVariance, float radiusVariance, float spawnFrequencyVariance)
+        {
+            this.speedVariance = speedVariance;
+            this.radiusVariance = radiusVariance;
+            this.spawnFrequencyVariance = spawnFrequencyVariance;
+        }
     }
 
     private struct SpawnParams
     {
         public float speed;
         public float radius;
+
+        public SpawnParams(float speed, float radius)
+        {
+            this.speed = speed;
+            this.radius = radius;
+        }
     }
 
-    public GenericBulletHazard(GenericBullet bulletPrefab, GameObject indicatorPrefab, Settings settings, Curves curves, Variances variances)
+    public TargetBulletHazard(ProjectileObject bulletPrefab, GameObject indicatorPrefab, Settings settings, Curves curves, Variances variances)
     {
         this.bulletPrefab = bulletPrefab;
         this.indicatorPrefab = indicatorPrefab;
@@ -95,15 +127,15 @@ public class GenericBulletHazard : IHazard
 
     private void Spawn(SpawnParams data, Vector2 pos)
     {
-        var instance = arena.CreateBullet(bulletPrefab);
-        var dirToPlayer = (arena.Player.Position - pos).normalized;
-
         int levelDamage = settings.damage[level];
 
         float? maxLifetime = settings.maxLifetime[level];
         if (maxLifetime <= 0) maxLifetime = null;
 
-        instance.Spawn(arena, pos, dirToPlayer, levelDamage, maxLifetime, t => SpeedCurve(data.speed, t), t => RadiusCurve(data.radius, t), FollowCurve);
+        var instance = arena.CreateBulletObject(bulletPrefab);
+        var bullet = new TargetBullet(instance, pos, levelDamage, maxLifetime, t => SpeedCurve(data.speed, t), t => RadiusCurve(data.radius, t), FollowCurve);
+        bullet.projectile.Color = settings.bulletColor;
+        arena.AddBullet(bullet);
     }
 
     private void ShowIndicator(Vector2 position)

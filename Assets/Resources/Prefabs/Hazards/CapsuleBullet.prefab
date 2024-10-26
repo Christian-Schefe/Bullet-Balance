@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4817275455429225605}
-  - component: {fileID: 1149145475124471157}
+  - component: {fileID: 8346685917804195039}
   m_Layer: 0
-  m_Name: BlueCircleBullet
+  m_Name: CapsuleBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 966252641123361417}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1149145475124471157
+--- !u!114 &8346685917804195039
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,11 +43,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5021805817780835433}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a342dff0aff4df84089403b7a872fc80, type: 3}
+  m_Script: {fileID: 11500000, guid: c2916ecf8f91619488bf2c73707f5e18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 5253604075189174254}
-  collider2d: {fileID: 5372706499200410081}
+  sprite: {fileID: 5253604075189174254}
+  hitbox: {fileID: 5197871170666869986}
 --- !u!1 &6726982237398662987
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +57,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 966252641123361417}
-  - component: {fileID: 5372706499200410081}
+  - component: {fileID: 5197871170666869986}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -80,8 +80,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4817275455429225605}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &5372706499200410081
-CircleCollider2D:
+--- !u!70 &5197871170666869986
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -113,8 +113,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_Size: {x: 0.5, y: 1}
+  m_Direction: 0
 --- !u!1 &9078457439517628111
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,11 +188,11 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: c75b306f51a971c458ca6e184c2944d7, type: 3}
-  m_Color: {r: 0.19607843, g: 0.44804782, b: 0.81960785, a: 1}
+  m_Sprite: {fileID: -5177388603050735206, guid: 2dc01be5419729b4eb1c3ea8e4c12987, type: 3}
+  m_Color: {r: 0.8207547, g: 0.2276342, b: 0.19744569, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 0.5, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0

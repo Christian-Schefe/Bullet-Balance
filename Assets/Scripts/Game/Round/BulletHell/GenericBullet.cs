@@ -4,41 +4,32 @@ using System.Collections.Generic;
 using Tweenables;
 using UnityEngine;
 
-public class GenericBullet : Projectile
+public abstract class GenericBullet : Projectile
 {
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private Collider2D collider2d;
+    public ProjectileObject projectile;
 
-    private Arena arena;
+    protected Arena arena;
 
-    private Vector2 dir;
-    private int damage;
-    private float? maxLifetime;
+    protected int damage;
+    protected float? maxLifetime;
 
-    private Func<float, float> radius;
-    private Func<float, float> speed;
-    private Func<float, float> follow;
+    protected Func<float, float> radius;
 
-    private float timeLived;
-    private float spawnTime;
+    protected float spawnTime;
 
-    public void Spawn(Arena arena, Vector2 pos, Vector2 dir, int damage, float? maxLifetime, Func<float, float> speed, Func<float, float> radius, Func<float, float> follow)
+    public GenericBullet(ProjectileObject projectile, Vector2 pos, int damage, float? maxLifetime, Func<float, float> radius)
     {
-        this.arena = arena;
+        this.projectile = projectile;
+        arena = Globals<Arena>.Instance;
 
-        transform.position = pos;
-        this.dir = dir.normalized;
         this.damage = damage;
         this.maxLifetime = maxLifetime;
-
-        this.speed = speed;
         this.radius = radius;
-        this.follow = follow;
 
-        timeLived = 0;
         spawnTime = arena.GameTime;
 
-        transform.localScale = 2 * radius(0) * Vector3.one;
+        projectile.Pos = pos;
+        projectile.Radius = radius(0);
     }
 
     public override void DealEnemyDamage(TopFight topFight)
@@ -53,32 +44,28 @@ public class GenericBullet : Projectile
 
     public override bool IsHit(Player player)
     {
-        return player.Collider.IsTouching(collider2d);
+        return projectile.IsCollidingWith(player.Collider);
     }
 
-    public override void PlayerHitDestroy()
+    public override void HandleDestroy(bool playerHit)
     {
-        this.TweenScale().To(Vector3.zero).Duration(0.1f).OnComplete(() => Destroy(gameObject)).RunNew();
+        bool instantDestroy = !playerHit;
+        projectile.AnimateDestroy(instantDestroy);
     }
+
+    protected abstract void UpdatePosition(float timeLived, out Vector2 dir);
 
     public override void Tick(float time, out bool shouldDestroy)
     {
-        timeLived = time - spawnTime;
+        var timeLived = time - spawnTime;
 
-        var playerDir = (arena.Player.Position - (Vector2)transform.position).normalized;
-        dir = Vector3.Slerp(dir, playerDir, follow(timeLived) * Time.deltaTime).normalized;
+        UpdatePosition(timeLived, out var dir);
 
-        var velocity = speed(timeLived) * dir;
-        transform.position += (Vector3)velocity * Time.deltaTime;
+        projectile.Dir = dir;
+        projectile.Radius = radius(timeLived);
 
-        shouldDestroy = timeLived > 1 && arena.IsFullyOutside(transform.position, radius(timeLived));
+        shouldDestroy = timeLived > 1 && projectile.IsOutside(arena);
         shouldDestroy |= maxLifetime is float t && timeLived > t;
 
-        var angle = -Vector2.SignedAngle(dir, Vector2.up);
-        transform.rotation = Quaternion.Euler(new(0, 0, angle));
-
-        var curScale = 2 * radius(timeLived) * Vector3.one;
-
-        transform.localScale = curScale;
     }
 }

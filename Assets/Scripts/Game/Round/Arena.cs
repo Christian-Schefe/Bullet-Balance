@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Arena : MonoBehaviour
 {
-    [SerializeField] private Transform minCorner, maxCorner;
+    [SerializeField] private Transform minCorner, maxCorner, bulletContainer;
 
     [SerializeField] private Player player;
     [SerializeField] private TopFight topFight;
@@ -66,13 +66,13 @@ public class Arena : MonoBehaviour
             {
                 bulletsToRemove.Add(bullet);
                 bullet.DealEnemyDamage(topFight);
-                Destroy(bullet.gameObject);
+                bullet.HandleDestroy(false);
             }
             else if (bullet.IsHit(player))
             {
-                bullet.DealPlayerDamage(topFight);
                 bulletsToRemove.Add(bullet);
-                bullet.PlayerHitDestroy();
+                bullet.DealPlayerDamage(topFight);
+                bullet.HandleDestroy(true);
             }
         }
 
@@ -123,11 +123,15 @@ public class Arena : MonoBehaviour
         }
     }
 
-    public T CreateBullet<T>(T prefab) where T : Projectile
+    public T CreateBulletObject<T>(T prefab) where T : MonoBehaviour
     {
-        var instance = Instantiate(prefab);
-        bullets.Add(instance);
+        var instance = Instantiate(prefab, bulletContainer);
         return instance;
+    }
+
+    public void AddBullet(Projectile bullet)
+    {
+        bullets.Add(bullet);
     }
 
     public Vector2 Constrain(Vector2 pos, float radius)

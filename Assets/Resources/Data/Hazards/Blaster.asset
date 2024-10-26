@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hazardName: Blaster
   hazardId: blaster
-  iconSprite: {fileID: -2413806693520163455, guid: c75b306f51a971c458ca6e184c2944d7, type: 3}
-  bulletPrefab: {fileID: 1149145475124471157, guid: 0a66bbf44eae624469b5dd6358b32126, type: 3}
+  iconSprite: {fileID: 1488314944, guid: d31df7261db24f94f87591ffdae37aa6, type: 3}
+  bulletPrefab: {fileID: 2064167461035219738, guid: 0a66bbf44eae624469b5dd6358b32126, type: 3}
   indicatorPrefab: {fileID: 1878340698160527050, guid: a736414c8892b3e4e9fea75eb5c4c5ba, type: 3}
   speed:
   - 3
@@ -122,3 +122,4 @@ MonoBehaviour:
   spawnFrequencyVariance: 0
   speedVariance: 0
   radiusVariance: 0
+  bulletColor: {r: 0.19607843, g: 0.44705883, b: 0.81960785, a: 1}

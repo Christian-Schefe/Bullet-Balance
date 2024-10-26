@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hazardName: Cannon
   hazardId: cannon
-  iconSprite: {fileID: -2413806693520163455, guid: c75b306f51a971c458ca6e184c2944d7, type: 3}
-  bulletPrefab: {fileID: 1149145475124471157, guid: 29b42265a1219b447be2e2783f6c088b, type: 3}
+  iconSprite: {fileID: -1279314523, guid: d31df7261db24f94f87591ffdae37aa6, type: 3}
+  bulletPrefab: {fileID: 8346685917804195039, guid: 29b42265a1219b447be2e2783f6c088b, type: 3}
   indicatorPrefab: {fileID: 1878340698160527050, guid: a736414c8892b3e4e9fea75eb5c4c5ba, type: 3}
   speed:
   - 2
@@ -113,3 +113,4 @@ MonoBehaviour:
   spawnFrequencyVariance: 0.1
   speedVariance: 0.1
   radiusVariance: 0
+  bulletColor: {r: 0.81960785, g: 0.22745098, b: 0.19607843, a: 1}
