@@ -30,11 +30,21 @@ public class Map : MonoBehaviour
         }
 
         var lastLayer = WorldData.nodeTypes.Count - 1;
-        var bossPositon = new Vector2Int(WorldData.nodeTypes[lastLayer].Count - 1, lastLayer);
-        if (MapData.PlayerPosition == bossPositon && MapData.WorldList.HasWorld(MapData.WorldIndex + 1))
+        var bossPosition = new Vector2Int(WorldData.nodeTypes[lastLayer].Count - 1, lastLayer);
+        if (MapData.PlayerPosition == bossPosition)
         {
-            MapData.WorldIndex++;
-            MapData.PlayerPosition = Vector2Int.zero;
+            if (MapData.WorldList.HasWorld(MapData.WorldIndex + 1))
+            {
+                MapData.WorldIndex++;
+                MapData.PlayerPosition = Vector2Int.zero;
+            }
+            else
+            {
+                this.TweenDelayedAction(() =>
+                {
+                    Globals<RunManager>.Instance.Win();
+                }, 0.5f).RunNew();
+            }
         }
     }
 
@@ -53,6 +63,8 @@ public class Map : MonoBehaviour
 
     private void Start()
     {
+        Globals<DataManger>.Instance.CreateSnapshot();
+
         positionIndicator = Instantiate(positionIndicatorPrefab);
 
         world.onNodeClicked += OnNodeClicked;
@@ -96,10 +108,17 @@ public class Map : MonoBehaviour
             dragStart = null;
         }
 
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             print("Debug Reset");
             SetPlayerPosition(Vector2Int.zero, true);
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            print("Debug Boss Teleport");
+            var lastLayer = WorldData.nodeTypes.Count - 1;
+            var bossPosition = new Vector2Int(WorldData.nodeTypes[lastLayer].Count - 1, lastLayer);
+            SetPlayerPosition(bossPosition, true);
         }
     }
 

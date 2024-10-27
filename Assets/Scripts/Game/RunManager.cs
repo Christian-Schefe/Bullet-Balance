@@ -13,6 +13,7 @@ public class RunManager : MonoBehaviour
 
     public void ContinueRun()
     {
+        Globals<DataManger>.Instance.ContinueRun();
         LoadScene(SceneType.Map);
     }
 
@@ -47,7 +48,13 @@ public class RunManager : MonoBehaviour
 
     public void GameOver()
     {
-        DataManger.RunData.IsRunning = false;
+        DataManger.RunData.RunState = RunState.GameOver;
+        LoadScene(SceneType.GameOver);
+    }
+
+    public void Win()
+    {
+        DataManger.RunData.RunState = RunState.Win;
         LoadScene(SceneType.GameOver);
     }
 

@@ -13,14 +13,18 @@ MonoBehaviour:
   m_Name: Slingshot
   m_EditorClassIdentifier: 
   hazardName: Slingshot
+  tooltipDescriptions:
+  - Fires stones along a curved path
+  - Fires stones along a curved path
+  - Fires stones along a curved path
   hazardId: slingshot
   iconSprite: {fileID: -995384440, guid: d31df7261db24f94f87591ffdae37aa6, type: 3}
   bulletPrefab: {fileID: 2064167461035219738, guid: 0a66bbf44eae624469b5dd6358b32126, type: 3}
   indicatorPrefab: {fileID: 4125457473854315811, guid: 29fb5bd3a6126b94e8d8d5541b6dd1e8, type: 3}
   speed:
-  - 0.4
-  - 0.6
-  - 0.8
+  - 4
+  - 5
+  - 6
   radius:
   - 0.1
   - 0.125

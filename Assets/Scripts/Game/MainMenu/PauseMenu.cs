@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : MonoBehaviour, IWindow
 {
     [SerializeField] private RectTransform pauseMenu;
     [SerializeField] private BetterButton closeButton, resetSettingsButton, mainMenuButton;
+
+    private Action closeCallback;
 
     private void Awake()
     {
@@ -15,19 +18,15 @@ public class PauseMenu : MonoBehaviour
         mainMenuButton.AddClickListener(OnMainMenuButtonClicked);
     }
 
-    private void Update()
+    public void SetOpen(bool open)
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            pauseMenu.gameObject.SetActive(true);
-            Signals.Get<PauseMenuIsOpen>().Dispatch(true);
-        }
+        pauseMenu.gameObject.SetActive(open);
+        Signals.Get<PauseMenuIsOpen>().Dispatch(open);
     }
 
     private void OnCloseButtonClicked()
     {
-        pauseMenu.gameObject.SetActive(false);
-        Signals.Get<PauseMenuIsOpen>().Dispatch(false);
+        closeCallback?.Invoke();
     }
 
     private void OnResetSettingsButtonClicked()
@@ -38,5 +37,16 @@ public class PauseMenu : MonoBehaviour
     private void OnMainMenuButtonClicked()
     {
         Globals<RunManager>.Instance.LoadScene(SceneType.MainMenu);
+    }
+
+    public void Open(Action closeCallback)
+    {
+        SetOpen(true);
+        this.closeCallback = closeCallback;
+    }
+
+    public void Close()
+    {
+        SetOpen(false);
     }
 }

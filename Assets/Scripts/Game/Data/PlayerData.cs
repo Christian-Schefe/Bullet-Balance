@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Yeast;
 
 public class MapData
 {
@@ -49,17 +50,29 @@ public class MapData
         currentDifficultyStore.Remove();
         currentNodeTypeStore.Remove();
     }
+
+    public void CreateSnapshot(Dictionary<string, string> snapshot)
+    {
+        snapshot[playerPositionStore.Key] = PlayerPosition.ToJson();
+        snapshot[worldIndexStore.Key] = WorldIndex.ToJson();
+    }
+
+    public void ApplySnapshot(Dictionary<string, string> snapshot)
+    {
+        PlayerPosition = snapshot[playerPositionStore.Key].FromJson<Vector2Int>();
+        WorldIndex = snapshot[worldIndexStore.Key].FromJson<int>();
+    }
 }
 
 public class RunData
 {
-    public readonly PersistentValue<bool> isRunningStore = new("run.isRunning", PersistenceMode.GlobalPersistence);
+    public readonly PersistentValue<RunState> runStateStore = new("run.runState", PersistenceMode.GlobalPersistence);
     public readonly PersistentValue<int> seedStore = new("run.seed", PersistenceMode.GlobalPersistence);
 
-    public bool IsRunning
+    public RunState RunState
     {
-        get => isRunningStore.GetOrDefault(false);
-        set => isRunningStore.Set(value);
+        get => runStateStore.GetOrDefault(RunState.GameOver);
+        set => runStateStore.Set(value);
     }
 
     public int Seed
@@ -71,8 +84,13 @@ public class RunData
     public void Reset(int seed)
     {
         seedStore.Set(seed);
-        isRunningStore.Set(true);
+        runStateStore.Set(RunState.Running);
     }
+}
+
+public enum RunState
+{
+    Running, GameOver, Win
 }
 
 public class SettingsData
@@ -139,6 +157,20 @@ public class PlayerData
         MaxHealth = startHealth;
         Gold = startGold;
     }
+
+    public void CreateSnapshot(Dictionary<string, string> snapshot)
+    {
+        snapshot[healthStore.Key] = Health.ToJson();
+        snapshot[maxHealthStore.Key] = MaxHealth.ToJson();
+        snapshot[goldStore.Key] = Gold.ToJson();
+    }
+
+    public void ApplySnapshot(Dictionary<string, string> snapshot)
+    {
+        Health = snapshot[healthStore.Key].FromJson<int>();
+        MaxHealth = snapshot[maxHealthStore.Key].FromJson<int>();
+        Gold = snapshot[goldStore.Key].FromJson<int>();
+    }
 }
 
 public class InventoryData
@@ -176,5 +208,17 @@ public class InventoryData
     {
         hazardLevelsStore.Set(new());
         artifactsStore.Set(new());
+    }
+
+    public void CreateSnapshot(Dictionary<string, string> snapshot)
+    {
+        snapshot[hazardLevelsStore.Key] = HazardLevels.ToJson();
+        snapshot[artifactsStore.Key] = Artifacts.ToJson();
+    }
+
+    public void ApplySnapshot(Dictionary<string, string> snapshot)
+    {
+        hazardLevelsStore.Set(snapshot[hazardLevelsStore.Key].FromJson<List<(string, int)>>());
+        artifactsStore.Set(snapshot[artifactsStore.Key].FromJson<HashSet<string>>());
     }
 }

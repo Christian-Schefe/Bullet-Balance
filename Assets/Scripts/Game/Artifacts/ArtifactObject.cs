@@ -5,8 +5,11 @@ using UnityEngine;
 public abstract class ArtifactObject : ScriptableObject
 {
     public string artifactName;
+    public string tooltipDescription;
     public string artifactId;
     public Sprite iconSprite;
+
+    public TooltipData GetTooltipData() => new(artifactName, tooltipDescription, null);
 
     public virtual void OnAquire()
     {

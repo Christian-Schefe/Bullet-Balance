@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Medkit
   m_EditorClassIdentifier: 
   artifactName: Medkit
+  tooltipDescription: Decreases heal price by 25% and increases heal amount by 60%
   artifactId: medkit
   iconSprite: {fileID: -674130477, guid: bfbd74520fe88364c8faec981e836778, type: 3}
   addedMaxHealth: 0

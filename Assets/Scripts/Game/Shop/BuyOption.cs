@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 public class BuyOption : MonoBehaviour
 {
-    [SerializeField] private Image image;
+    [SerializeField] private ClickableIcon icon;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private PriceButton selectButton;
     public UnityEvent OnClick => selectButton.onClick;
@@ -18,11 +15,7 @@ public class BuyOption : MonoBehaviour
         set => nameText.text = value;
     }
 
-    public Sprite Sprite
-    {
-        get => image.sprite;
-        set => image.sprite = value;
-    }
+    public ClickableIcon Icon => icon;
 
     public int? Price
     {

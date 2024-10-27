@@ -12,12 +12,12 @@ public class MainMenu : MonoBehaviour
         quitButton.AddClickListener(OnPressQuit);
 
         continueButton.AddClickListener(OnPressContinue);
-        continueButton.SetInteractable(DataManger.RunData.IsRunning);
+        continueButton.SetInteractable(Globals<DataManger>.Instance.CanContinueRun());
     }
 
     private void OnPressContinue()
     {
-        if (!DataManger.RunData.IsRunning) return;
+        if (!Globals<DataManger>.Instance.CanContinueRun()) return;
 
         Globals<RunManager>.Instance.ContinueRun();
     }

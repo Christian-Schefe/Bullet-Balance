@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Cookie
   m_EditorClassIdentifier: 
   artifactName: Cookie
+  tooltipDescription: Heal by 5 after every fight
   artifactId: cookie
   iconSprite: {fileID: -1615012565, guid: bfbd74520fe88364c8faec981e836778, type: 3}
   addedMaxHealth: 0

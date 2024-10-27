@@ -14,16 +14,41 @@ public class BetterButton : UIBehaviour, IPointerDownHandler, IPointerUpHandler,
     public State CurrentState => currentState;
 
     public UnityEvent onClick;
+    public UnityEvent<bool> onHover;
 
     public bool Interactable { get => interactable; set => SetInteractable(value); }
 
     public void AddClickListener(UnityAction action) => onClick.AddListener(action);
     public void RemoveClickListener(UnityAction action) => onClick.RemoveListener(action);
 
+    public void AddHoverListener(UnityAction<bool> action) => onHover.AddListener(action);
+    public void RemoveHoverListener(UnityAction<bool> action) => onHover.RemoveListener(action);
+
     public void SetInteractable(bool value)
     {
         if (interactable == value) return;
         interactable = value;
+        if (isPointerInside)
+        {
+            onHover?.Invoke(interactable);
+        }
+        UpdateInteractableState();
+    }
+
+    protected override void OnDisable()
+    {
+        if (interactable && isPointerInside)
+        {
+            onHover?.Invoke(false);
+        }
+    }
+
+    protected override void OnEnable()
+    {
+        if (isPointerInside && interactable)
+        {
+            onHover?.Invoke(true);
+        }
         UpdateInteractableState();
     }
 
@@ -61,14 +86,22 @@ public class BetterButton : UIBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnPointerEnter(PointerEventData eventData)
     {
         isPointerInside = true;
-        if (interactable) ToState(isPointerDown ? State.Pressed : State.Hovered);
+        if (interactable)
+        {
+            ToState(isPointerDown ? State.Pressed : State.Hovered);
+            onHover?.Invoke(true);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         isPointerInside = false;
         isPointerDown = false;
-        if (interactable) ToState(State.Interactable);
+        if (interactable)
+        {
+            ToState(State.Interactable);
+            onHover?.Invoke(false);
+        }
     }
 
 #if UNITY_EDITOR

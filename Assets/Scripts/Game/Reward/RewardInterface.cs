@@ -1,12 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RewardInterface : MonoBehaviour
 {
     [SerializeField] private HazardRegistry hazardRegistry;
-    [SerializeField] private ClickableHazardIcon hazardIconPrefab;
+    [SerializeField] private ClickableIcon hazardIconPrefab;
 
     [SerializeField] private PriceButton healButton;
     [SerializeField] private BetterButton finishButton;
@@ -25,7 +23,7 @@ public class RewardInterface : MonoBehaviour
 
     private int[] upgradePrices = new int[] { 10, 20 };
 
-    private List<ClickableHazardIcon> hazardIcons = new();
+    private List<ClickableIcon> hazardIcons = new();
     private int? selectedIcon;
 
     private bool hasHealed;
@@ -99,8 +97,11 @@ public class RewardInterface : MonoBehaviour
             var (type, level) = inventory[i];
             var index = i;
             var instance = Instantiate(hazardIconPrefab, upgradeGrid);
-            instance.Set(hazardRegistry.Lookup(type).iconSprite, () => SelectUpgradeIcon(index));
-            instance.SetLevel(level);
+            var hazard = hazardRegistry.Lookup(type);
+            instance.Sprite = hazard.iconSprite;
+            instance.OnClick.AddListener(() => SelectUpgradeIcon(index));
+            instance.Level = level;
+            instance.GetTooltip().SetData(hazard.GetTooltipData(level));
             hazardIcons.Add(instance);
         }
     }

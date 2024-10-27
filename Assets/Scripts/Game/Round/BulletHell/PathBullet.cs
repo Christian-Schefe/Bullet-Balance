@@ -26,4 +26,9 @@ public class PathBullet : GenericBullet
         dir = diff.normalized;
         projectile.Pos = newPos;
     }
+
+    protected override bool PreventDestruction()
+    {
+        return pathProgress < 1;
+    }
 }

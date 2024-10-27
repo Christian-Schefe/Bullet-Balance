@@ -7,6 +7,8 @@ public class DataManger : MonoBehaviour
     [SerializeField] private int startHealth;
     [SerializeField] private int startGold;
 
+    private PersistentValue<Dictionary<string, string>> snapshotStore = new("snapshot", PersistenceMode.GlobalPersistence);
+
     private RunData runData;
     private PlayerData playerData;
     private InventoryData inventoryData;
@@ -47,6 +49,28 @@ public class DataManger : MonoBehaviour
     {
         mapData ??= new MapData();
         return mapData;
+    }
+
+    public bool CanContinueRun()
+    {
+        return snapshotStore.TryGet(out _) && RunData.RunState == RunState.Running;
+    }
+
+    public void CreateSnapshot()
+    {
+        var data = new Dictionary<string, string>();
+        MapData.CreateSnapshot(data);
+        PlayerData.CreateSnapshot(data);
+        InventoryData.CreateSnapshot(data);
+        snapshotStore.Set(data);
+    }
+
+    public void ContinueRun()
+    {
+        var data = snapshotStore.Get();
+        MapData.ApplySnapshot(data);
+        PlayerData.ApplySnapshot(data);
+        InventoryData.ApplySnapshot(data);
     }
 
     public void StartNewRun()

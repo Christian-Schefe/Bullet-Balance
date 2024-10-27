@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PathBulletHazardObject", menuName = "Hazards/PathBulletHazardObject")]
@@ -22,5 +20,12 @@ public class PathBulletHazardObject : HazardObject
         var curves = new PathBulletHazard.Curves(speedCurve, radiusCurve);
         var variances = new PathBulletHazard.Variances(radiusVariance, speedVariance, spawnFrequencyVariance);
         return new PathBulletHazard(bulletPrefab, indicatorPrefab, settings, curves, variances);
+    }
+
+    public override TooltipData GetTooltipData(int level)
+    {
+        var baseData = base.GetTooltipData(level);
+        baseData.damage = damage[level];
+        return baseData;
     }
 }

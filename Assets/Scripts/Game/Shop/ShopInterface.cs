@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ShopInterface : MonoBehaviour
@@ -29,11 +27,13 @@ public class ShopInterface : MonoBehaviour
 
             var index = i;
             var price = ArtifactPrice();
-            option.Sprite = artifact.iconSprite;
+            option.Icon.Sprite = artifact.iconSprite;
             option.Name = artifact.name;
             option.Price = price;
             option.AvailableCount = 1;
             option.OnClick.AddListener(() => BuyArtifact(option, index, price));
+            option.Icon.Level = null;
+            option.Icon.GetTooltip().SetData(artifact.GetTooltipData());
         }
 
         for (var i = 0; i < hazardIds.Count; i++)
@@ -47,11 +47,13 @@ public class ShopInterface : MonoBehaviour
 
             var index = i;
             var price = HazardPrice(level);
-            option.Sprite = hazard.iconSprite;
+            option.Icon.Sprite = hazard.iconSprite;
             option.Name = hazard.name;
             option.Price = price;
             option.AvailableCount = 1;
             option.OnClick.AddListener(() => BuyHazard(option, index, price));
+            option.Icon.Level = null;
+            option.Icon.GetTooltip().SetData(hazard.GetTooltipData(level));
         }
     }
 

@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Cannon
   m_EditorClassIdentifier: 
   hazardName: Cannon
+  tooltipDescriptions:
+  - Fires small bullets
+  - Fires small bullets
+  - Fires small bullets that follow the player
   hazardId: cannon
   iconSprite: {fileID: -1279314523, guid: d31df7261db24f94f87591ffdae37aa6, type: 3}
   bulletPrefab: {fileID: 8346685917804195039, guid: 29b42265a1219b447be2e2783f6c088b, type: 3}

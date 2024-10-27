@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Tweenables;
 using UnityEngine;
@@ -37,7 +36,7 @@ public class PathIndicator : MonoBehaviour
                 gradient.colorKeys,
                 new GradientAlphaKey[] {
                     new(t * 0.15f, 0),
-                    new(0, 1)
+                    new(0, 0.85f)
                 }
             );
             line.colorGradient = newGradient;

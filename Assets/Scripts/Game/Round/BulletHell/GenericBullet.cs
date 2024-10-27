@@ -55,6 +55,11 @@ public abstract class GenericBullet : Projectile
 
     protected abstract void UpdatePosition(float timeLived, out Vector2 dir);
 
+    protected virtual bool PreventDestruction()
+    {
+        return false;
+    }
+
     public override void Tick(float time, out bool shouldDestroy)
     {
         var timeLived = time - spawnTime;
@@ -66,6 +71,6 @@ public abstract class GenericBullet : Projectile
 
         shouldDestroy = timeLived > 1 && projectile.IsOutside(arena);
         shouldDestroy |= maxLifetime is float t && timeLived > t;
-
+        if (PreventDestruction()) shouldDestroy = false;
     }
 }

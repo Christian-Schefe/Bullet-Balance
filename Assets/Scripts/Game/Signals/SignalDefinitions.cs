@@ -7,3 +7,4 @@ public class ArenaOnKillEnemy : Signal<Enemy> { }
 public class InventoryOnAquireArtifact : Signal<string> { }
 
 public class PauseMenuIsOpen : Signal<bool> { }
+public class InventoryIsOpen : Signal<bool> { }

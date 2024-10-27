@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Apple
   m_EditorClassIdentifier: 
   artifactName: Apple
+  tooltipDescription: Increases Max Health by 20
   artifactId: apple
   iconSprite: {fileID: 678312997, guid: bfbd74520fe88364c8faec981e836778, type: 3}
   addedMaxHealth: 20

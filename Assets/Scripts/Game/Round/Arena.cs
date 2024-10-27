@@ -29,6 +29,8 @@ public class Arena : MonoBehaviour
     private bool isDone;
     private bool isPaused;
 
+    private bool isPauseMenuOpen, isInventoryOpen;
+
     private void Awake()
     {
         time = 0;
@@ -39,6 +41,7 @@ public class Arena : MonoBehaviour
         isPaused = false;
 
         Signals.Get<PauseMenuIsOpen>().AddSceneListener(OnPauseMenuIsOpenChanged);
+        Signals.Get<InventoryIsOpen>().AddSceneListener(OnInventoryIsOpenChanged);
 
         SpawnHazards();
 
@@ -93,7 +96,14 @@ public class Arena : MonoBehaviour
 
     private void OnPauseMenuIsOpenChanged(bool isOpen)
     {
-        isPaused = isOpen;
+        isPauseMenuOpen = isOpen;
+        isPaused = isPauseMenuOpen || isInventoryOpen;
+    }
+
+    private void OnInventoryIsOpenChanged(bool isOpen)
+    {
+        isInventoryOpen = isOpen;
+        isPaused = isPauseMenuOpen || isInventoryOpen;
     }
 
     private void SpawnHazards()

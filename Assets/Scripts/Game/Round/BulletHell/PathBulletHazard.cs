@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Tweenables;
 using UnityEngine;
 
@@ -107,10 +105,34 @@ public class PathBulletHazard : IHazard
         var indicatorPos = posArr[0];
         var startPos = posArr[1];
         var endPos = arena.RandomEdgePosition(0.5f)[0];
-        var path = QuadSplinePath(startPos, arena.Player.Position, endPos);
+        var targetPos = arena.Constrain(arena.Player.Position + Random.insideUnitCircle, 0.25f);
+        var middlePos = CalcControlPoint(startPos, endPos, targetPos);
+        var path = QuadSplinePath(startPos, middlePos, endPos);
         ShowIndicator(indicatorPos, path);
 
         arena.TweenDelayedAction(() => Spawn(spawnParams, path), 0.5f).RunNew();
+    }
+
+    private Vector2 CalcControlPoint(Vector2 start, Vector2 end, Vector2 target)
+    {
+        var tm = 0.5f;
+        var itm = 1 - tm;
+        return (target - itm * itm * start - tm * tm * end) / (2 * itm * tm);
+    }
+
+    private float ApproxPathLength(System.Func<float, Vector2> path)
+    {
+        var steps = 100;
+        var length = 0f;
+        var prev = path(0);
+        for (var i = 1; i <= steps; i++)
+        {
+            var t = i / (float)steps;
+            var next = path(t);
+            length += Vector2.Distance(prev, next);
+            prev = next;
+        }
+        return length;
     }
 
     private float SpeedCurve(float scalar, float t) => curves.speed.Evaluate(t) * scalar;
@@ -133,7 +155,8 @@ public class PathBulletHazard : IHazard
         if (maxLifetime <= 0) maxLifetime = null;
 
         var instance = arena.CreateBulletObject(bulletPrefab);
-        var bullet = new PathBullet(instance, levelDamage, maxLifetime, t => SpeedCurve(data.speed, t), t => RadiusCurve(data.radius, t), path);
+        var speedFactor = data.speed / ApproxPathLength(path);
+        var bullet = new PathBullet(instance, levelDamage, maxLifetime, t => SpeedCurve(speedFactor, t), t => RadiusCurve(data.radius, t), path);
         bullet.projectile.Color = settings.bulletColor;
         arena.AddBullet(bullet);
     }

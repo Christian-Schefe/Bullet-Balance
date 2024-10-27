@@ -9,6 +9,8 @@ public class PersistentValue<T>
 
     private SaveState saveState;
 
+    public string Key => key;
+
     public PersistentValue(string key, PersistenceMode mode)
     {
         this.key = key;

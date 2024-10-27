@@ -12,7 +12,8 @@ public class SaveState : MonoBehaviour
 
     public PersistenceMode mode;
 
-    private Dictionary<string, string> serializedData = new();
+    private SaveData saveData = SaveData.New();
+
     private readonly Dictionary<string, IListener> listeners = new();
     private readonly Dictionary<string, IBox> data = new();
     private bool isLoaded = false;
@@ -108,12 +109,12 @@ public class SaveState : MonoBehaviour
 
         foreach (var (key, box) in data)
         {
-            serializedData[key] = box.GetValue().ToJson();
+            saveData.data[key] = box.GetValue().ToJson();
         }
         Debug.Log($"Saving SaveState '{path}' " + mode);
-        if (serializedData.Count == 0) return;
+        if (saveData.data.Count == 0) return;
 
-        JsonPersistence.Save(path, serializedData);
+        JsonPersistence.Save(path, saveData);
     }
 
     private void Load()
@@ -122,7 +123,7 @@ public class SaveState : MonoBehaviour
         if (isLoaded) return;
         Debug.Log($"Loading SaveState '{path}' " + mode);
 
-        serializedData = JsonPersistence.LoadDefault(path, new Dictionary<string, string>());
+        saveData = JsonPersistence.LoadDefault(path, SaveData.New());
 
         isLoaded = true;
     }
@@ -133,7 +134,7 @@ public class SaveState : MonoBehaviour
 
         JsonPersistence.Delete(path);
 
-        serializedData.Clear();
+        saveData.data.Clear();
         foreach (var key in data.Keys.ToList())
         {
             data.Remove(key);
@@ -191,7 +192,7 @@ public class SaveState : MonoBehaviour
 
     public void Remove(string key)
     {
-        serializedData.Remove(key);
+        saveData.data.Remove(key);
         if (data.Remove(key))
         {
             OnUpdate(key);
@@ -219,10 +220,10 @@ public class SaveState : MonoBehaviour
         {
             return anyBox is Box<T>;
         }
-        else if (serializedData.ContainsKey(key))
+        else if (saveData.data.ContainsKey(key))
         {
-            Debug.Log("loading: " + key + " = " + serializedData[key]);
-            if (serializedData[key].TryFromJson(out T value))
+            Debug.Log("loading: " + key + " = " + saveData.data[key]);
+            if (saveData.data[key].TryFromJson(out T value))
             {
                 data[key] = new Box<T>(value);
                 return true;
@@ -308,6 +309,16 @@ public class SaveState : MonoBehaviour
         public void ResetSceneListeners()
         {
             sceneOnValueChanged = null;
+        }
+    }
+
+    public struct SaveData
+    {
+        public Dictionary<string, string> data;
+
+        public static SaveData New()
+        {
+            return new SaveData() { data = new() };
         }
     }
 }

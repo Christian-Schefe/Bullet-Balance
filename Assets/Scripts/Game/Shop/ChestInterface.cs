@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ChestInterface : MonoBehaviour
@@ -27,14 +25,16 @@ public class ChestInterface : MonoBehaviour
         {
             var type = artifactTypes[i];
             var artifact = artifactRegistry.Lookup(type);
-            ChooseOption option = Instantiate(choicePrefab, artifactsContainer);
+            var option = Instantiate(choicePrefab, artifactsContainer);
             chooseOptions.Add(option);
 
-            option.Sprite = artifact.iconSprite;
+            option.ClickableIcon.Sprite = artifact.iconSprite;
             option.Name = artifact.name;
             option.Index = i;
-            option.OnClick.AddListener(() => SelectArtifact(option));
+            option.ClickableIcon.OnClick.AddListener(() => SelectArtifact(option));
             option.Selected = false;
+            option.ClickableIcon.GetTooltip().SetData(artifact.GetTooltipData());
+            option.ClickableIcon.Level = null;
 
             if (i == 0) SelectArtifact(option);
         }
@@ -59,7 +59,7 @@ public class ChestInterface : MonoBehaviour
         foreach (var option in chooseOptions)
         {
             option.Selected = false;
-            option.OnClick.RemoveAllListeners();
+            option.ClickableIcon.OnClick.RemoveAllListeners();
         }
     }
 

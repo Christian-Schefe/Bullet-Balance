@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Blaster
   m_EditorClassIdentifier: 
   hazardName: Blaster
+  tooltipDescriptions:
+  - Fires big bullets
+  - Fires big bullets
+  - Fires big bullets
   hazardId: blaster
   iconSprite: {fileID: 1488314944, guid: d31df7261db24f94f87591ffdae37aa6, type: 3}
   bulletPrefab: {fileID: 2064167461035219738, guid: 0a66bbf44eae624469b5dd6358b32126, type: 3}
