@@ -8,7 +8,7 @@ public class TargetBullet : GenericBullet
     private Func<float, float> speed;
     private Func<float, float> follow;
 
-    public TargetBullet(ProjectileObject projectile, Vector2 pos, int damage, float? maxLifetime, Func<float, float> speed, Func<float, float> radius, Func<float, float> follow) : base(projectile, pos, damage, maxLifetime, radius)
+    public TargetBullet(ProjectileEntity projectile, Vector2 pos, int damage, float? maxLifetime, Func<float, float> speed, Func<float, float> radius, Func<float, float> follow) : base(projectile, pos, damage, maxLifetime, radius)
     {
         projectile.Dir = (arena.Player.Position - projectile.Pos).normalized;
 

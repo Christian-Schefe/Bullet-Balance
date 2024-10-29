@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class GenericBullet : Projectile
 {
-    public ProjectileObject projectile;
+    public ProjectileEntity projectile;
 
     protected Arena arena;
 
@@ -17,7 +17,7 @@ public abstract class GenericBullet : Projectile
 
     protected float spawnTime;
 
-    public GenericBullet(ProjectileObject projectile, Vector2 pos, int damage, float? maxLifetime, Func<float, float> radius)
+    public GenericBullet(ProjectileEntity projectile, Vector2 pos, int damage, float? maxLifetime, Func<float, float> radius)
     {
         this.projectile = projectile;
         arena = Globals<Arena>.Instance;

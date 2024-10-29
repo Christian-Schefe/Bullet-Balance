@@ -26,6 +26,7 @@ public class Map : MonoBehaviour
 
         if (MapData.WorldList.worlds == null)
         {
+            print("Generating new map");
             GenerateNewMap();
         }
 
@@ -58,7 +59,7 @@ public class Map : MonoBehaviour
         }
 
         MapData.PlayerPosition = Vector2Int.zero;
-        MapData.WorldList.worlds = worlds;
+        MapData.WorldList = new() { worlds = worlds };
     }
 
     private void Start()
@@ -128,6 +129,7 @@ public class Map : MonoBehaviour
 
         SetPlayerPosition(node.Position, false);
         var sceneType = world.GetSceneType(DataManger.MapData.PlayerPosition);
+
         this.TweenDelayedAction(() =>
         {
             Globals<RunManager>.Instance.LoadScene(sceneType);
@@ -142,8 +144,8 @@ public class Map : MonoBehaviour
         if (allowSelection) selectableNodes = world.GetConnectedNodes(position);
         else selectableNodes.Clear();
 
-        DataManger.MapData.CurrentDifficulty = (float)(position.y - 1) / (WorldData.connections.Count - 3);
-        DataManger.MapData.CurrentNodeType = WorldData.nodeTypes[position.y][position.x];
+        DataManger.MapData.CurrentDifficulty = Mathf.Clamp01((float)(position.y - 1) / (WorldData.connections.Count - 3));
+        DataManger.MapData.CurrentNodeType = WorldData.nodeTypes[position.y][position.x].FunctionalType;
 
         foreach (var node in world.Nodes)
         {
@@ -156,19 +158,19 @@ public class Map : MonoBehaviour
         var connections = MapConnectionGenerator.GenerateRandomConnections(random);
         var data = new WorldLayout
         {
-            nodeTypes = new List<List<NodeType>>(),
+            nodeTypes = new List<List<ExtendedNodeType>>(),
             connections = connections
         };
 
         for (int i = 0; i < connections.Count; i++)
         {
             var layer = connections[i];
-            var typeLayer = new List<NodeType>();
+            var typeLayer = new List<ExtendedNodeType>();
             data.nodeTypes.Add(typeLayer);
 
             for (int j = 0; j < layer.Count; j++)
             {
-                var type = NodeType.Fight;
+                var type = ExtendedNodeType.Fight;
                 typeLayer.Add(type);
                 data.nodeTypes[i][j] = type;
             }
@@ -184,23 +186,24 @@ public class Map : MonoBehaviour
         int chestCount = random.IntRange(2, 5);
         int eventCount = random.IntRange(1, 5);
 
-        data.nodeTypes[0][0] = NodeType.Spawn;
-        data.nodeTypes[^1][0] = NodeType.Boss;
+        data.nodeTypes[0][0] = ExtendedNodeType.Spawn;
+        data.nodeTypes[^1][0] = ExtendedNodeType.Boss;
 
-        void PickRandoms(int count, int minLayer, NodeType type)
+        void PickRandoms(int count, int minLayer, ExtendedNodeType type)
         {
             var choices = new List<Vector2Int>();
             for (int i = minLayer; i < data.nodeTypes.Count; i++)
             {
                 for (int j = 0; j < data.nodeTypes[i].Count; j++)
                 {
-                    if (data.nodeTypes[i][j] == NodeType.Fight)
+                    if (data.nodeTypes[i][j] == ExtendedNodeType.Fight)
                     {
                         choices.Add(new Vector2Int(j, i));
                     }
                 }
             }
             int placeCount = Mathf.Min(count, choices.Count);
+            Debug.Log($"Placing {placeCount} {type} nodes");
             for (int i = 0; i < placeCount; i++)
             {
                 var index = random.IntRange(0, choices.Count);
@@ -210,14 +213,14 @@ public class Map : MonoBehaviour
             }
         }
 
-        PickRandoms(shopCount, 2, NodeType.Shop);
-        PickRandoms(eliteCount, 2, NodeType.HardFight);
-        PickRandoms(chestCount, 1, NodeType.Chest);
-        PickRandoms(eventCount, 1, NodeType.Event);
+        PickRandoms(shopCount, 2, ExtendedNodeType.Shop);
+        PickRandoms(eliteCount, 2, ExtendedNodeType.HardFight);
+        PickRandoms(chestCount, 1, ExtendedNodeType.Chest);
+        PickRandoms(eventCount, 1, ExtendedNodeType.RandomEvent(random));
     }
 }
 
-public class WorldList
+public struct WorldList
 {
     public List<WorldLayout> worlds;
 
@@ -227,9 +230,9 @@ public class WorldList
     }
 }
 
-public class WorldLayout
+public struct WorldLayout
 {
-    public List<List<NodeType>> nodeTypes;
+    public List<List<ExtendedNodeType>> nodeTypes;
     public List<List<List<int>>> connections;
 }
 

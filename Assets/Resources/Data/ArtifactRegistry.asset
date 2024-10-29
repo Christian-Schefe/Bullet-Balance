@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a1b03d44c7ff4545b3005eba250fb7d, type: 3}
   m_Name: ArtifactRegistry
   m_EditorClassIdentifier: 
-  artifacts:
+  objects:
   - {fileID: 11400000, guid: e7d401868091dab4ea5e77b13e5ef605, type: 2}
   - {fileID: 11400000, guid: 0f93f2bf21ce87a4fb0fa7ba6a19da4f, type: 2}
   - {fileID: 11400000, guid: 648cfabbc5d57b447ba203a3e3f06c59, type: 2}

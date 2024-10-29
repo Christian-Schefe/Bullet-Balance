@@ -7,7 +7,7 @@ public class GameOverMenu : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI sceneTitle;
 
-    [SerializeField] private SceneObject mapScene, menuScene;
+    [SerializeField] private SceneReference mapScene, menuScene;
     [SerializeField] private BetterButton restartButton, toMenuButton;
     [SerializeField] private SceneTransition transistion;
 

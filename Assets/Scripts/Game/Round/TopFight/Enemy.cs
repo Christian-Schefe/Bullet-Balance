@@ -4,58 +4,67 @@ using Tweenables;
 using Tweenables.Core;
 using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy
 {
     private int health;
     private int maxHealth;
 
-    [SerializeField] private EntityHealthbar healthbar;
-    [SerializeField] private DamageNumber damageNumberPrefab;
+    protected EnemyEntity entity;
+    protected EnemyObject data;
 
-    private TweenRunner runner;
-    private EnemyType type;
-    public EnemyType Type => type;
-
-    public void AnimateMove(Vector3 to, float delay)
+    public Enemy(EnemyEntity entity, EnemyObject data)
     {
-        this.TweenPosition().To(to).Delay(delay).Duration(0.5f).Ease(Easing.CubicInOut).RunQueued(ref runner);
+        this.entity = entity;
+        this.data = data;
+        maxHealth = data.CalculateHealth(DataManger.MapData.WorldIndex, DataManger.MapData.CurrentDifficulty);
+        health = maxHealth;
+        entity.Healthbar.UpdateHealthBar(health, maxHealth);
+        entity.SetSpriteAnimation(data.iconSprites);
+    }
+
+    public EnemyAttackType AttackType => data.AttackType;
+    public EnemyMovementType MovementType => data.MovementType;
+
+    public void AnimateMove(Vector3 to, float delay, bool instant)
+    {
+        entity.AnimateMove(to, delay, instant);
     }
 
     public bool DealDamage(int damage)
     {
         health = Mathf.Max(0, health - damage);
-        healthbar.UpdateHealthBar(health, maxHealth);
-
-        var damageNumber = Instantiate(damageNumberPrefab, transform);
-        damageNumber.DisplayDamage(transform, damage, false);
+        entity.Healthbar.UpdateHealthBar(health, maxHealth);
+        entity.AnimateTakeDamage(damage);
 
         return health == 0;
     }
 
-    public void SetHealth(int health, int maxHealth)
-    {
-        this.health = health;
-        this.maxHealth = maxHealth;
-        healthbar.UpdateHealthBar(health, maxHealth);
-    }
-
-    protected abstract int ComputeHealth(float difficulty);
-
     public void Die()
     {
-        this.TweenScale().To(Vector3.zero).Duration(0.5f).Ease(Easing.CubicIn).OnComplete(() => Destroy(gameObject)).RunNew();
+        entity.AnimateDestroy();
     }
 
-    public void Spawn(EnemyType type, float difficulty, float delay)
+    public void Spawn(float delay)
     {
-        this.type = type;
-        transform.localScale = Vector3.zero;
-        this.TweenScale().From(Vector3.zero).To(Vector3.one).Delay(delay).Duration(0.5f).Ease(Easing.CubicOut).RunNew();
-        var health = ComputeHealth(difficulty);
-        SetHealth(health, health);
+        entity.AnimateSpawn(delay);
     }
 
     public abstract void DoAttackAnimation(Vector3 target);
 
-    public abstract int CalculateDamage();
+    public int CalculateDamage()
+    {
+        return data.CalculateDamage(DataManger.MapData.WorldIndex, DataManger.MapData.CurrentDifficulty);
+    }
+}
+
+public enum EnemyAttackType
+{
+    Melee,
+    Ranged
+}
+
+public enum EnemyMovementType
+{
+    Stationary,
+    Moving
 }

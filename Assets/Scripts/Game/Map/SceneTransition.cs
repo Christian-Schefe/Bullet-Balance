@@ -22,7 +22,7 @@ public class SceneTransition : MonoBehaviour
         TransitionAwake();
     }
 
-    public bool TransitionLoadScene(SceneObject scene)
+    public bool TransitionLoadScene(SceneReference scene)
     {
         if (isTransitioning)
         {
@@ -50,7 +50,8 @@ public class SceneTransition : MonoBehaviour
     public void TransitionAwake()
     {
         sprite.enabled = true;
-        new Tween<float>(this).From(0).To(1).Use(t => SetProgress(t)).Duration(duration).Ease(Easing.CubicOut).OnFinally(() =>
+        SetProgress(0);
+        new Tween<float>(this).Delay(0.25f).From(0).To(1).Use(t => SetProgress(t)).Duration(duration).Ease(Easing.CubicOut).OnFinally(() =>
         {
             sprite.enabled = false;
         }).RunImmediate(ref runner);

@@ -22,9 +22,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 8346685917804195039, guid: 29b42265a1219b447be2e2783f6c088b, type: 3}
   indicatorPrefab: {fileID: 1878340698160527050, guid: a736414c8892b3e4e9fea75eb5c4c5ba, type: 3}
   speed:
-  - 2
   - 3
   - 4
+  - 5
   radius:
   - 0.15
   - 0.175

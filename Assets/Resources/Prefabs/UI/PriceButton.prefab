@@ -363,6 +363,9 @@ MonoBehaviour:
   onClick:
     m_PersistentCalls:
       m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
   hoverClip: {fileID: 8300000, guid: 5d173cf24b0fc7441a7e57d0f76211b4, type: 3}
   pressClip: {fileID: 8300000, guid: b5d57b3ea6c3f4d41ba8b2956a2da85b, type: 3}
   interactableColor: {r: 0.22745098, g: 0.50980395, b: 0.81960785, a: 1}
@@ -415,11 +418,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1453056249321022840, guid: f8152bae55d42e44db5b0dbae7a34181, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1453056249321022840, guid: f8152bae55d42e44db5b0dbae7a34181, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1453056249321022840, guid: f8152bae55d42e44db5b0dbae7a34181, type: 3}
       propertyPath: m_LocalPosition.x

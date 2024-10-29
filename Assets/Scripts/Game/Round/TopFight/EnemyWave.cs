@@ -1,22 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class EnemyWave
 {
-    private Dictionary<int, EnemyType> initialWave;
-    private Queue<(float, EnemyType)> wave;
+    private Dictionary<int, EnemyObject> initialWave;
+    private Queue<(float, EnemyObject)> wave;
 
-    public static EnemyWave TestWave1 => new(
-        new() { { 4, EnemyType.Knight }, { 5, EnemyType.Knight } },
-        new() { (0, EnemyType.Knight), (7, EnemyType.Archer), (14, EnemyType.Knight) }
-    );
-    public static EnemyWave EliteWave1 => new(
-        new() { { 3, EnemyType.Knight }, { 4, EnemyType.Knight }, { 5, EnemyType.Archer } },
-        new() { (0, EnemyType.Knight), (0, EnemyType.Knight), (0, EnemyType.Knight), (0, EnemyType.Archer) }
-    );
-
-    public EnemyWave(Dictionary<int, EnemyType> initialWave, List<(float, EnemyType)> spawns)
+    public EnemyWave(Dictionary<int, EnemyObject> initialWave, List<(float, EnemyObject)> spawns)
     {
         wave = new(spawns);
         this.initialWave = initialWave;
@@ -24,12 +13,12 @@ public class EnemyWave
 
     public bool IsEmpty => wave.Count == 0;
 
-    public EnemyType? GetInitialEnemy(int position)
+    public EnemyObject GetInitialEnemy(int position)
     {
         return initialWave.TryGetValue(position, out var type) ? type : null;
     }
 
-    public bool TrySpawn(float time, out EnemyType enemyType)
+    public bool TrySpawn(float time, out EnemyObject enemyType)
     {
         if (IsEmpty)
         {
@@ -48,9 +37,4 @@ public class EnemyWave
         enemyType = default;
         return false;
     }
-}
-
-public enum EnemyType
-{
-    Knight, Archer
 }

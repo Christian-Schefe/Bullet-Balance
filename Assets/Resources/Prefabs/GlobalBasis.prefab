@@ -242,6 +242,7 @@ MonoBehaviour:
   musicClipList:
   - {fileID: 8300000, guid: 8990daa8405f877488423bccced46503, type: 3}
   - {fileID: 8300000, guid: b9aff7074451a094cad7db459263239b, type: 3}
+  - {fileID: 8300000, guid: c0f0d70d501b01d4c95dfdb0e6956aa4, type: 3}
 --- !u!114 &7416677776990299295
 MonoBehaviour:
   m_ObjectHideFlags: 0

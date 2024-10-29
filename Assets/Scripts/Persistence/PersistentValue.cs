@@ -132,4 +132,19 @@ public class PersistentValue<T>
         if (saveState == null) FindSaveState();
         saveState.OnUpdate(key);
     }
+
+    public void Modify(System.Func<T, T> modifier)
+    {
+        if (saveState == null) FindSaveState();
+        var val = Get();
+        Set(modifier(val));
+    }
+
+    public void Modify(System.Action<T> modifier)
+    {
+        if (saveState == null) FindSaveState();
+        var val = Get();
+        modifier(val);
+        MarkDirty();
+    }
 }

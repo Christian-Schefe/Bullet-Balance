@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TargetBulletHazard : IHazard
 {
-    private readonly ProjectileObject bulletPrefab;
+    private readonly ProjectileEntity bulletPrefab;
     private readonly GameObject indicatorPrefab;
 
     private readonly Curves curves;
@@ -79,7 +79,7 @@ public class TargetBulletHazard : IHazard
         }
     }
 
-    public TargetBulletHazard(ProjectileObject bulletPrefab, GameObject indicatorPrefab, Settings settings, Curves curves, Variances variances)
+    public TargetBulletHazard(ProjectileEntity bulletPrefab, GameObject indicatorPrefab, Settings settings, Curves curves, Variances variances)
     {
         this.bulletPrefab = bulletPrefab;
         this.indicatorPrefab = indicatorPrefab;

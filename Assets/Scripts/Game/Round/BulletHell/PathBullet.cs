@@ -10,7 +10,7 @@ public class PathBullet : GenericBullet
 
     private float pathProgress;
 
-    public PathBullet(ProjectileObject projectile, int damage, float? maxLifetime, Func<float, float> speed, Func<float, float> radius, Func<float, Vector2> path) : base(projectile, path(0), damage, maxLifetime, radius)
+    public PathBullet(ProjectileEntity projectile, int damage, float? maxLifetime, Func<float, float> speed, Func<float, float> radius, Func<float, Vector2> path) : base(projectile, path(0), damage, maxLifetime, radius)
     {
         this.speed = speed;
         this.path = path;

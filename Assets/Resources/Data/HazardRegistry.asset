@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1000bf50ea42ba4c81b6c4e2662980c, type: 3}
   m_Name: HazardRegistry
   m_EditorClassIdentifier: 
-  hazards:
-  - {fileID: 11400000, guid: 34a6ab53e298f304eba1799bb7d3c1f7, type: 2}
+  objects:
   - {fileID: 11400000, guid: 7ee88489a262a53418cbebf440d51ee4, type: 2}
+  - {fileID: 11400000, guid: 34a6ab53e298f304eba1799bb7d3c1f7, type: 2}
   - {fileID: 11400000, guid: dd7765663e201b84e9d53432bf03b92b, type: 2}

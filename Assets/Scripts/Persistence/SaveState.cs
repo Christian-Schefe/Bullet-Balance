@@ -228,6 +228,11 @@ public class SaveState : MonoBehaviour
                 data[key] = new Box<T>(value);
                 return true;
             }
+            else
+            {
+                Debug.LogError($"Failed to load key '{key}' from save data.");
+                saveData.data[key].FromJson<T>();
+            }
         }
         return false;
     }

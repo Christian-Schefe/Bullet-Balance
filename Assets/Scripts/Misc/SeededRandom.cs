@@ -12,6 +12,11 @@ public class SeededRandom
         else random = new System.Random();
     }
 
+    public bool Probability(float probability)
+    {
+        return random.NextDouble() < probability;
+    }
+
     public float Range(float min, float max)
     {
         return (float)random.NextDouble() * (max - min) + min;
@@ -32,5 +37,10 @@ public class SeededRandom
         var angle = Range(0f, 2 * Mathf.PI);
         var radius = Mathf.Sqrt(Range(0f, 1f));
         return new Vector2(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius);
+    }
+
+    public T Choose<T>(IReadOnlyList<T> list)
+    {
+        return list[IntRange(0, list.Count)];
     }
 }

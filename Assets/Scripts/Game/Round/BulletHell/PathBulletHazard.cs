@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PathBulletHazard : IHazard
 {
-    private readonly ProjectileObject bulletPrefab;
+    private readonly ProjectileEntity bulletPrefab;
     private readonly PathIndicator indicatorPrefab;
 
     private readonly Curves curves;
@@ -67,7 +67,7 @@ public class PathBulletHazard : IHazard
         public float radius;
     }
 
-    public PathBulletHazard(ProjectileObject bulletPrefab, PathIndicator indicatorPrefab, Settings settings, Curves curves, Variances variances)
+    public PathBulletHazard(ProjectileEntity bulletPrefab, PathIndicator indicatorPrefab, Settings settings, Curves curves, Variances variances)
     {
         this.bulletPrefab = bulletPrefab;
         this.indicatorPrefab = indicatorPrefab;

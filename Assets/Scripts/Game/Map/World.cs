@@ -26,7 +26,7 @@ public class World : MonoBehaviour
 
     public ICollection<Node> Nodes => nodeObjects.Values;
 
-    public void Build(SeededRandom random, List<List<NodeType>> layers, List<List<List<int>>> connections)
+    public void Build(SeededRandom random, List<List<ExtendedNodeType>> layers, List<List<List<int>>> connections)
     {
         connectionLookup = new();
 
@@ -84,7 +84,7 @@ public class World : MonoBehaviour
         BoundingBox = Rect.MinMaxRect(min.x, min.y, max.x, max.y);
     }
 
-    private void SpawnLayer(int layer, List<NodeType> nodeLayer)
+    private void SpawnLayer(int layer, List<ExtendedNodeType> nodeLayer)
     {
         for (int x = 0; x < nodeLayer.Count; x++)
         {
@@ -93,20 +93,20 @@ public class World : MonoBehaviour
         }
     }
 
-    private void SpawnNode(int layerSize, Vector2Int pos, NodeType nodeType)
+    private void SpawnNode(int layerSize, Vector2Int pos, ExtendedNodeType nodeType)
     {
         var remappedX = pos.x - (layerSize - 1) * 0.5f;
 
         Vector2 localPos = remappedX * 4f / (layerSize + 1) * nodeSpacing + pos.y * nodeLayerSpacing;
 
-        var sprite = nodeRegistry[nodeType].icon;
-        var color = nodeRegistry[nodeType].color;
+        var sprite = nodeRegistry[nodeType.appearanceType].icon;
+        var color = nodeRegistry[nodeType.appearanceType].color;
 
         var randomOffsetVec = random.InsideUnitCircle() * randomOffset;
 
         var node = Instantiate(nodePrefab, transform);
         node.transform.localPosition = localPos + randomOffsetVec;
-        node.ConfigureNode(nodeType, pos);
+        node.ConfigureNode(nodeType.FunctionalType, pos);
         node.SetSprite(sprite, color);
         node.onClick += node => onNodeClicked?.Invoke(node);
 
@@ -149,8 +149,12 @@ public class World : MonoBehaviour
 
     public SceneType GetSceneType(Vector2Int position)
     {
-        var node = GetNode(position);
-        return nodeRegistry[node.NodeType].scene;
+        return GetSceneType(GetNode(position).NodeType);
+    }
+
+    public SceneType GetSceneType(NodeType nodeType)
+    {
+        return nodeRegistry[nodeType].scene;
     }
 
     public List<Node> GetConnectedNodes(Vector2Int position)

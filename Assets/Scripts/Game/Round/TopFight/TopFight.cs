@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class TopFight : MonoBehaviour
 {
+    [SerializeField] private WaveGenerator waveGenerator;
     [SerializeField] private DamageNumber damageNumberPrefab;
-    [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private EnemyEntity enemyEntityPrefab;
     [SerializeField] private Arena arena;
     [SerializeField] private int slotCount;
 
@@ -20,31 +21,30 @@ public class TopFight : MonoBehaviour
     private EnemyWave enemyWave;
 
     private float lastShiftTime;
-    private float difficulty;
 
     private void Start()
     {
         enemies = new Enemy[slotCount];
         var nodeType = DataManger.MapData.CurrentNodeType;
-        difficulty = DataManger.MapData.CurrentDifficulty;
 
-        if (nodeType == NodeType.HardFight)
+        var waveType = nodeType switch
         {
-            enemyWave = EnemyWave.EliteWave1;
-        }
-        else
-        {
-            enemyWave = EnemyWave.TestWave1;
-        }
+            NodeType.Fight => WaveType.Normal,
+            NodeType.HardFight => WaveType.Elite,
+            NodeType.Boss => WaveType.Boss,
+            _ => throw new System.ArgumentOutOfRangeException()
+        };
+        enemyWave = waveGenerator.GenerateWave(waveType);
 
-        for (int i = 0; i < enemies.Length; i++)
+        for (int i = 0; i < slotCount; i++)
         {
-            if (enemyWave.GetInitialEnemy(i) is EnemyType type)
+            var initialEnemy = enemyWave.GetInitialEnemy(slotCount - 1 - i);
+            if (initialEnemy != null)
             {
-                var enemy = enemySpawner.SpawnEnemy(type, transform);
-                enemies[i] = enemy;
+                var enemy = Instantiate(enemyEntityPrefab, transform);
+                enemies[i] = initialEnemy.CreateEnemy(enemy);
                 UpdateEnemyPosition(i, true);
-                enemy.Spawn(type, difficulty, 0);
+                enemy.AnimateSpawn(0);
             }
         }
     }
@@ -60,13 +60,12 @@ public class TopFight : MonoBehaviour
             StartCoroutine(DoEnemyAttacks(notShiftedEnemies));
         }
 
-        if (CanSpawnEnemy() && enemyWave.TrySpawn(time, out var type))
+        if (CanSpawnEnemy() && enemyWave.TrySpawn(time, out var data))
         {
-            var enemy = enemySpawner.SpawnEnemy(type, transform);
+            var enemy = Instantiate(enemyEntityPrefab, transform);
             enemy.transform.position = fromPos.position;
-            enemies[^1] = enemy;
-            enemy.Spawn(type, difficulty, 0.5f);
-
+            enemies[^1] = data.CreateEnemy(enemy);
+            enemy.AnimateSpawn(0.5f);
         }
 
         hasPlayerWon = enemyWave.IsEmpty && enemies.All(e => e == null);
@@ -77,7 +76,8 @@ public class TopFight : MonoBehaviour
         foreach (var i in enemies)
         {
             var enemy = this.enemies[i];
-            if (i != 0 && enemy.Type != EnemyType.Archer) continue;
+            var attackType = enemy.AttackType;
+            if (i != 0 && attackType != EnemyAttackType.Ranged) continue;
             AttackPlayer(enemy.CalculateDamage());
             enemy.DoAttackAnimation(playerTarget.transform.position);
 
@@ -91,15 +91,8 @@ public class TopFight : MonoBehaviour
     {
         if (enemies[i] == null) return;
         float progress = 1 - i / (float)(enemies.Length - 1);
-        if (instant)
-        {
-            enemies[i].transform.position = Vector3.Lerp(fromPos.position, toPos.position, progress);
-        }
-        else
-        {
-            var delay = 0.1f * i;
-            enemies[i].AnimateMove(Vector3.Lerp(fromPos.position, toPos.position, progress), delay);
-        }
+        var delay = instant ? 0 : 0.1f * i;
+        enemies[i].AnimateMove(Vector3.Lerp(fromPos.position, toPos.position, progress), delay, instant);
     }
 
     private void ShiftEnemies(out List<int> notShiftedEnemies)
