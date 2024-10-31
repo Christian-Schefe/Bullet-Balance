@@ -125,10 +125,8 @@ public class Arena : MonoBehaviour
 
     public void DealDamage(int damage)
     {
-        playerData.Health = Mathf.Max(0, playerData.Health - damage);
-        if (playerData.Health == 0)
+        if (DataManger.DamagePlayer(damage))
         {
-            runManager.GameOver();
             isDone = true;
         }
     }

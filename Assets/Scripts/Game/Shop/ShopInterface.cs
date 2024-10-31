@@ -16,8 +16,10 @@ public class ShopInterface : MonoBehaviour
 
     public void Awake()
     {
-        artifactTypes = RandomArtifactTypes(artifactCount, artifactRegistry);
-        var hazardIds = RandomHazardTypes(hazardCount, hazardRegistry);
+        var rng = new SeededRandom(DataManger.MapData.CurrentNodeInfo.sceneSeed);
+
+        artifactTypes = RandomArtifactTypes(rng, artifactCount, artifactRegistry);
+        var hazardIds = RandomHazardTypes(rng, hazardCount, hazardRegistry);
 
         for (var i = 0; i < artifactTypes.Count; i++)
         {
@@ -28,7 +30,7 @@ public class ShopInterface : MonoBehaviour
             var index = i;
             var price = ArtifactPrice();
             option.Icon.Sprite = artifact.iconSprite;
-            option.Name = artifact.name;
+            option.Name = artifact.artifactName;
             option.Price = price;
             option.AvailableCount = 1;
             option.OnClick.AddListener(() => BuyArtifact(option, index, price));
@@ -48,7 +50,7 @@ public class ShopInterface : MonoBehaviour
             var index = i;
             var price = HazardPrice(level);
             option.Icon.Sprite = hazard.iconSprite;
-            option.Name = hazard.name;
+            option.Name = hazard.hazardName;
             option.Price = price;
             option.AvailableCount = 1;
             option.OnClick.AddListener(() => BuyHazard(option, index, price));
@@ -94,13 +96,13 @@ public class ShopInterface : MonoBehaviour
         return Globals<ArtifactApplier>.Instance.CalculateArtifactPrice(basePrice);
     }
 
-    public static List<string> RandomArtifactTypes(int amount, ArtifactRegistry registry)
+    public static List<string> RandomArtifactTypes(SeededRandom rng, int amount, ArtifactRegistry registry)
     {
         var owned = DataManger.InventoryData.Artifacts;
 
         var notOwned = new List<string>();
 
-        foreach (var artifact in registry.Enumerator)
+        foreach (var artifact in registry.Objects)
         {
             if (!owned.Contains(artifact.artifactId))
             {
@@ -114,7 +116,7 @@ public class ShopInterface : MonoBehaviour
         {
             if (notOwned.Count == 0) break;
 
-            var index = Random.Range(0, notOwned.Count);
+            var index = rng.IntRange(0, notOwned.Count);
             var type = notOwned[index];
             notOwned.Remove(type);
             chosen.Add(type);
@@ -123,11 +125,11 @@ public class ShopInterface : MonoBehaviour
         return chosen;
     }
 
-    public static List<string> RandomHazardTypes(int amount, HazardRegistry hazards)
+    public static List<string> RandomHazardTypes(SeededRandom rng, int amount, HazardRegistry hazards)
     {
         var allSet = new List<string>();
 
-        foreach (var hazard in hazards.Enumerator)
+        foreach (var hazard in hazards.Objects)
         {
             allSet.Add(hazard.hazardId);
         }
@@ -138,7 +140,7 @@ public class ShopInterface : MonoBehaviour
         {
             if (allSet.Count == 0) break;
 
-            var index = Random.Range(0, allSet.Count);
+            var index = rng.IntRange(0, allSet.Count);
             var type = allSet[index];
             allSet.Remove(type);
             chosen.Add(type);

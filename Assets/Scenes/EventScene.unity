@@ -167,9 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ce06f25b4f2c94ba40bf456cd7bdf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eventRegistry: {fileID: 11400000, guid: 4f9c6c0814ab3c14ba4a2c6d2c465dd8, type: 2}
   choiceParent: {fileID: 1332473795}
   choicePrefab: {fileID: 7755657741694633471, guid: 050fc0517311819469828127129c49d6, type: 3}
-  choiceCount: 3
 --- !u!1001 &504157911
 PrefabInstance:
   m_ObjectHideFlags: 0

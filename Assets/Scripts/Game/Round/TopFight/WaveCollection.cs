@@ -7,7 +7,7 @@ public class WaveCollection : ScriptableObject
 {
     public List<WaveData> waves;
 
-    public EnemyWave GetRandomWave(float difficulty)
+    public EnemyWave GetRandomWave(SeededRandom rng, float difficulty)
     {
         var possibleWaves = new List<WaveAsset>();
         foreach (var wave in waves)
@@ -20,9 +20,9 @@ public class WaveCollection : ScriptableObject
         if (possibleWaves.Count == 0)
         {
             Debug.LogWarning("No waves found for difficulty " + difficulty);
-            return waves[Random.Range(0, waves.Count)].wave.CreateWave();
+            return waves[rng.IntRange(0, waves.Count)].wave.CreateWave();
         }
-        return possibleWaves[Random.Range(0, possibleWaves.Count)].CreateWave();
+        return possibleWaves[rng.IntRange(0, possibleWaves.Count)].CreateWave();
     }
 
     [System.Serializable]

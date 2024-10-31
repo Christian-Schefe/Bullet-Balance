@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class SeededRandom
 {
+    private int Seed { get; }
     private readonly System.Random random;
 
-    public SeededRandom(int? seed)
+    public SeededRandom(int seed)
     {
-        if (seed.HasValue) random = new System.Random(seed.Value);
-        else random = new System.Random();
+        Seed = seed;
+        random = new System.Random(Seed);
     }
 
     public bool Probability(float probability)
@@ -29,7 +30,7 @@ public class SeededRandom
 
     public int IntRangeInclusive(int min, int max)
     {
-        return (int)(random.NextDouble() * (max - min + 1) + min);
+        return IntRange(min, max + 1);
     }
 
     public Vector2 InsideUnitCircle()
@@ -42,5 +43,21 @@ public class SeededRandom
     public T Choose<T>(IReadOnlyList<T> list)
     {
         return list[IntRange(0, list.Count)];
+    }
+
+    public int GenSeed()
+    {
+        return random.Next(int.MinValue, int.MaxValue);
+    }
+
+    public void Shuffle<T>(IList<T> list)
+    {
+        for (int i = 0; i < list.Count - 1; i++)
+        {
+            var temp = list[i];
+            var randomIndex = IntRange(i, list.Count);
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
     }
 }

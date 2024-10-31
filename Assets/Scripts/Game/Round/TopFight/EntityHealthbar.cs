@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class EntityHealthbar : MonoBehaviour
 {
-    [SerializeField] private Transform healthbar;
-    [SerializeField] private Transform whiteScalar;
+    [SerializeField] private SpriteRenderer healthbar;
     [SerializeField] private TextMeshPro text;
 
     [SerializeField] private float whiteAbsoluteSpeed;
@@ -14,6 +13,13 @@ public class EntityHealthbar : MonoBehaviour
 
     private float whiteCurrent;
     private float whiteTarget;
+
+    private MaterialPropertyBlock propertyBlock;
+
+    private void Awake()
+    {
+        propertyBlock = new MaterialPropertyBlock();
+    }
 
     private void Update()
     {
@@ -27,34 +33,24 @@ public class EntityHealthbar : MonoBehaviour
     private void SetWhiteCurrent(float scale)
     {
         whiteCurrent = scale;
-        var whiteScale = whiteScalar.localScale;
-        whiteScale.x = scale;
-        whiteScalar.localScale = whiteScale;
+        propertyBlock.SetFloat("_WhitePercentage", whiteCurrent);
+        healthbar.SetPropertyBlock(propertyBlock);
     }
 
     public void UpdateHealthBar(int health, int maxHealth)
     {
         if (maxHealth == 0)
         {
-            var scale = healthbar.localScale;
-            scale.x = 0;
             whiteTarget = 0;
-            SetWhiteCurrent(Mathf.Max(whiteCurrent, whiteTarget));
-
-            healthbar.localScale = scale;
-            text.text = $"Undefined";
-
+            propertyBlock.SetFloat("_HealthPercentage", 0);
         }
         else
         {
-            var scale = healthbar.localScale;
-            scale.x = health / (float)maxHealth;
-            whiteTarget = scale.x;
-            SetWhiteCurrent(Mathf.Max(whiteCurrent, whiteTarget));
-
-            healthbar.localScale = scale;
-            text.text = $"{health}/{maxHealth}";
-
+            var healthPercentage = health / (float)maxHealth;
+            propertyBlock.SetFloat("_HealthPercentage", healthPercentage);
+            whiteTarget = healthPercentage;
         }
+        text.text = $"{health}/{maxHealth}";
+        SetWhiteCurrent(Mathf.Max(whiteCurrent, whiteTarget));
     }
 }

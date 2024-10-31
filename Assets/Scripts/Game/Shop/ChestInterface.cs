@@ -19,7 +19,8 @@ public class ChestInterface : MonoBehaviour
 
     public void Awake()
     {
-        artifactTypes = ShopInterface.RandomArtifactTypes(artifactCount, artifactRegistry);
+        var rng = new SeededRandom(DataManger.MapData.CurrentNodeInfo.sceneSeed);
+        artifactTypes = ShopInterface.RandomArtifactTypes(rng, artifactCount, artifactRegistry);
 
         for (var i = 0; i < artifactTypes.Count; i++)
         {
@@ -29,7 +30,7 @@ public class ChestInterface : MonoBehaviour
             chooseOptions.Add(option);
 
             option.ClickableIcon.Sprite = artifact.iconSprite;
-            option.Name = artifact.name;
+            option.Name = artifact.artifactName;
             option.Index = i;
             option.ClickableIcon.OnClick.AddListener(() => SelectArtifact(option));
             option.Selected = false;

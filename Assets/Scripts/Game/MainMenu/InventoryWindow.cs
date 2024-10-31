@@ -35,6 +35,7 @@ public class InventoryWindow : MonoBehaviour, IWindow
 
         foreach (var key in hazards)
         {
+            keysSet.Remove(key);
             if (hazardIcons.ContainsKey(key)) continue;
 
             var obj = hazardRegistry.Lookup(key.Item1);
@@ -45,7 +46,6 @@ public class InventoryWindow : MonoBehaviour, IWindow
             icon.GetTooltip().SetData(tooltipData);
 
             hazardIcons.Add(key, icon);
-            keysSet.Remove(key);
         }
 
         foreach (var key in keysSet)
@@ -63,6 +63,7 @@ public class InventoryWindow : MonoBehaviour, IWindow
 
         foreach (var key in artifacts)
         {
+            keysSet.Remove(key);
             if (artifactIcons.ContainsKey(key)) continue;
 
             var obj = artifactRegistry.Lookup(key);
@@ -72,7 +73,6 @@ public class InventoryWindow : MonoBehaviour, IWindow
             icon.GetTooltip().SetData(obj.GetTooltipData());
 
             artifactIcons.Add(key, icon);
-            keysSet.Remove(key);
         }
 
         foreach (var key in keysSet)

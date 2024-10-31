@@ -7,7 +7,7 @@ public abstract class ObjectRegistry<T> : ScriptableObject where T : ScriptableO
     [SerializeField] private List<T> objects = new();
 
     private Dictionary<string, T> objectsById;
-    public IEnumerable<T> Enumerator => objects;
+    public IReadOnlyList<T> Objects => objects;
 
     private void GenerateDictionary()
     {

@@ -18,7 +18,7 @@ MonoBehaviour:
   - slot: 1
     enemy: {fileID: 11400000, guid: cc84805653dbadd46bf1066926470b2f, type: 2}
   - slot: 2
-    enemy: {fileID: 11400000, guid: cc84805653dbadd46bf1066926470b2f, type: 2}
+    enemy: {fileID: 11400000, guid: 83e977b519ab5ab4ab3dde8c2bf11277, type: 2}
   delayedEnemies:
   - delay: 0
     enemy: {fileID: 11400000, guid: fe95a6e4f2202a4458ffdf79d74a22ba, type: 2}

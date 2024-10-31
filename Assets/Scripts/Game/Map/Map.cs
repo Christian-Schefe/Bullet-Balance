@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Tweenables;
 using UnityEngine;
@@ -111,15 +110,13 @@ public class Map : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            print("Debug Reset");
-            SetPlayerPosition(Vector2Int.zero, true);
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            print("Debug Boss Teleport");
-            var lastLayer = WorldData.nodeTypes.Count - 1;
-            var bossPosition = new Vector2Int(WorldData.nodeTypes[lastLayer].Count - 1, lastLayer);
-            SetPlayerPosition(bossPosition, true);
+            print("Debug Teleport");
+            selectableNodes = new(world.Nodes);
+
+            foreach (var node in world.Nodes)
+            {
+                node.SetSelected(selectableNodes.Contains(node));
+            }
         }
     }
 
@@ -144,8 +141,11 @@ public class Map : MonoBehaviour
         if (allowSelection) selectableNodes = world.GetConnectedNodes(position);
         else selectableNodes.Clear();
 
-        DataManger.MapData.CurrentDifficulty = Mathf.Clamp01((float)(position.y - 1) / (WorldData.connections.Count - 3));
-        DataManger.MapData.CurrentNodeType = WorldData.nodeTypes[position.y][position.x].FunctionalType;
+        var curNodeType = WorldData.nodeTypes[position.y][position.x];
+
+        var difficulty = Mathf.Clamp01((float)(position.y - 1) / (WorldData.connections.Count - 3));
+        var nodeType = curNodeType.FunctionalType;
+        DataManger.MapData.CurrentNodeInfo = new(difficulty, nodeType, curNodeType.sceneSeed);
 
         foreach (var node in world.Nodes)
         {
@@ -170,7 +170,7 @@ public class Map : MonoBehaviour
 
             for (int j = 0; j < layer.Count; j++)
             {
-                var type = ExtendedNodeType.Fight;
+                var type = ExtendedNodeType.Fight(random.GenSeed());
                 typeLayer.Add(type);
                 data.nodeTypes[i][j] = type;
             }
@@ -186,37 +186,49 @@ public class Map : MonoBehaviour
         int chestCount = random.IntRange(2, 5);
         int eventCount = random.IntRange(1, 5);
 
-        data.nodeTypes[0][0] = ExtendedNodeType.Spawn;
-        data.nodeTypes[^1][0] = ExtendedNodeType.Boss;
+        data.nodeTypes[0][0] = ExtendedNodeType.Spawn(data.nodeTypes[0][0].sceneSeed);
+        data.nodeTypes[^1][0] = ExtendedNodeType.Boss(data.nodeTypes[^1][0].sceneSeed);
 
-        void PickRandoms(int count, int minLayer, ExtendedNodeType type)
+        void PickRandoms(int count, int minLayer, NodeType type)
         {
             var choices = new List<Vector2Int>();
             for (int i = minLayer; i < data.nodeTypes.Count; i++)
             {
                 for (int j = 0; j < data.nodeTypes[i].Count; j++)
                 {
-                    if (data.nodeTypes[i][j] == ExtendedNodeType.Fight)
+                    if (data.nodeTypes[i][j].appearanceType == NodeType.Fight)
                     {
                         choices.Add(new Vector2Int(j, i));
                     }
                 }
             }
+
             int placeCount = Mathf.Min(count, choices.Count);
             Debug.Log($"Placing {placeCount} {type} nodes");
+
             for (int i = 0; i < placeCount; i++)
             {
                 var index = random.IntRange(0, choices.Count);
                 var choice = choices[index];
-                data.nodeTypes[choice.y][choice.x] = type;
+                var seed = data.nodeTypes[choice.y][choice.x].sceneSeed;
+                var extendedType = type switch
+                {
+                    NodeType.Shop => ExtendedNodeType.Shop(seed),
+                    NodeType.HardFight => ExtendedNodeType.HardFight(seed),
+                    NodeType.Chest => ExtendedNodeType.Chest(seed),
+                    NodeType.Event => ExtendedNodeType.RandomEvent(seed, random),
+                    _ => throw new System.ArgumentOutOfRangeException()
+                };
+
+                data.nodeTypes[choice.y][choice.x] = extendedType;
                 choices.RemoveAt(index);
             }
         }
 
-        PickRandoms(shopCount, 2, ExtendedNodeType.Shop);
-        PickRandoms(eliteCount, 2, ExtendedNodeType.HardFight);
-        PickRandoms(chestCount, 1, ExtendedNodeType.Chest);
-        PickRandoms(eventCount, 1, ExtendedNodeType.RandomEvent(random));
+        PickRandoms(shopCount, 2, NodeType.Shop);
+        PickRandoms(eliteCount, 2, NodeType.HardFight);
+        PickRandoms(chestCount, 1, NodeType.Chest);
+        PickRandoms(eventCount, 1, NodeType.Event);
     }
 }
 
@@ -227,6 +239,20 @@ public struct WorldList
     public bool HasWorld(int index)
     {
         return index >= 0 && index < worlds.Count;
+    }
+}
+
+public struct CurrentNodeInfo
+{
+    public float difficulty;
+    public NodeType nodeType;
+    public int sceneSeed;
+
+    public CurrentNodeInfo(float difficulty, NodeType nodeType, int sceneSeed)
+    {
+        this.difficulty = difficulty;
+        this.nodeType = nodeType;
+        this.sceneSeed = sceneSeed;
     }
 }
 

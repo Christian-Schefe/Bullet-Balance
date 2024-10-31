@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9169a0aa11efc8d46907d11cc505c68b, type: 3}
-  m_Name: Bat
+  m_Name: Wasp
   m_EditorClassIdentifier: 
-  enemyName: Bat
-  enemyId: bat
+  enemyName: Wasp
+  enemyId: wasp
   iconSprites:
-  - {fileID: -310309193, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
-  - {fileID: 1554682623, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
-  - {fileID: -1982698419, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
-  - {fileID: 1524072511, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
-  healthRange: {x: 10, y: 20}
-  damage: 1
-  movementType: 1
+  - {fileID: -1139348711, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
+  - {fileID: 647492242, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
+  - {fileID: -354035765, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
+  - {fileID: -1407769447, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
+  healthRange: {x: 40, y: 50}
+  damage: 2
+  movementType: 0
   attackType: 1
   rangedProjectilePrefab: {fileID: 5514819507152411333, guid: 08b9b18cdcadd0d449e072c180273201, type: 3}

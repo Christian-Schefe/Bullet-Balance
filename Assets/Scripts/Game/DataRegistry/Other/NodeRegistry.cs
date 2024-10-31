@@ -27,6 +27,7 @@ public class ExtendedNodeType
 {
     public NodeType appearanceType;
     public NodeType? functionalType;
+    public int sceneSeed;
 
     public NodeType FunctionalType => functionalType ?? appearanceType;
 
@@ -36,43 +37,23 @@ public class ExtendedNodeType
         functionalType = null;
     }
 
-    public ExtendedNodeType(NodeType appearanceType, NodeType? functionalType = null)
+    public ExtendedNodeType(int seed, NodeType appearanceType, NodeType? functionalType = null)
     {
+        this.sceneSeed = seed;
         this.appearanceType = appearanceType;
         this.functionalType = functionalType;
     }
 
-    public static bool operator ==(ExtendedNodeType a, ExtendedNodeType b)
-    {
-        return a.Equals(b);
-    }
-
-    public static bool operator !=(ExtendedNodeType a, ExtendedNodeType b)
-    {
-        return !a.Equals(b);
-    }
-
-    public override bool Equals(object obj)
-    {
-        return obj is ExtendedNodeType other && appearanceType == other.appearanceType && functionalType == other.functionalType;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(appearanceType, functionalType);
-    }
-
     public override string ToString()
     {
-        return $"{appearanceType}" + (functionalType.HasValue ? $" ({functionalType})" : "");
+        return $"{appearanceType}" + (functionalType.HasValue ? $" ({functionalType})" : "") + $" [{sceneSeed}]";
     }
 
-    public static ExtendedNodeType Spawn => new(NodeType.Spawn);
-    public static ExtendedNodeType Fight => new(NodeType.Fight);
-    public static ExtendedNodeType HardFight => new(NodeType.HardFight);
-    public static ExtendedNodeType Shop => new(NodeType.Shop);
-    public static ExtendedNodeType Boss => new(NodeType.Boss);
-    public static ExtendedNodeType Chest => new(NodeType.Chest);
-    public static ExtendedNodeType Event => new(NodeType.Event);
-    public static ExtendedNodeType RandomEvent(SeededRandom random) => new(NodeType.Event, random.Probability(0.5f) ? null : random.Choose(new List<NodeType>() { NodeType.Fight, NodeType.HardFight, NodeType.Chest, NodeType.Shop }));
+    public static ExtendedNodeType Spawn(int seed) => new(seed, NodeType.Spawn);
+    public static ExtendedNodeType Fight(int seed) => new(seed, NodeType.Fight);
+    public static ExtendedNodeType HardFight(int seed) => new(seed, NodeType.HardFight);
+    public static ExtendedNodeType Shop(int seed) => new(seed, NodeType.Shop);
+    public static ExtendedNodeType Boss(int seed) => new(seed, NodeType.Boss);
+    public static ExtendedNodeType Chest(int seed) => new(seed, NodeType.Chest);
+    public static ExtendedNodeType RandomEvent(int seed, SeededRandom random) => new(seed, NodeType.Event, random.Probability(0.5f) ? null : random.Choose(new List<NodeType>() { NodeType.Fight, NodeType.HardFight, NodeType.Chest, NodeType.Shop }));
 }

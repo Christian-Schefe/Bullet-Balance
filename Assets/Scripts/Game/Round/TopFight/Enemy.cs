@@ -16,7 +16,7 @@ public abstract class Enemy
     {
         this.entity = entity;
         this.data = data;
-        maxHealth = data.CalculateHealth(DataManger.MapData.WorldIndex, DataManger.MapData.CurrentDifficulty);
+        maxHealth = data.CalculateHealth(DataManger.MapData.WorldIndex, DataManger.MapData.CurrentNodeInfo.difficulty);
         health = maxHealth;
         entity.Healthbar.UpdateHealthBar(health, maxHealth);
         entity.SetSpriteAnimation(data.iconSprites);
@@ -53,7 +53,7 @@ public abstract class Enemy
 
     public int CalculateDamage()
     {
-        return data.CalculateDamage(DataManger.MapData.WorldIndex, DataManger.MapData.CurrentDifficulty);
+        return data.CalculateDamage(DataManger.MapData.WorldIndex, DataManger.MapData.CurrentNodeInfo.difficulty);
     }
 }
 

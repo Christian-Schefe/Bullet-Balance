@@ -25,7 +25,7 @@ public class TopFight : MonoBehaviour
     private void Start()
     {
         enemies = new Enemy[slotCount];
-        var nodeType = DataManger.MapData.CurrentNodeType;
+        var nodeType = DataManger.MapData.CurrentNodeInfo.nodeType;
 
         var waveType = nodeType switch
         {

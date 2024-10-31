@@ -9,8 +9,7 @@ public class MapData
     public readonly PersistentValue<Vector2Int> playerPositionStore = new("map.playerPosition", PersistenceMode.GlobalPersistence);
     public readonly PersistentValue<int> worldIndexStore = new("map.worldIndex", PersistenceMode.GlobalPersistence);
 
-    public readonly PersistentValue<float> currentDifficultyStore = new("map.difficulty", PersistenceMode.GlobalRuntime);
-    public readonly PersistentValue<NodeType> currentNodeTypeStore = new("map.nodeType", PersistenceMode.GlobalRuntime);
+    public readonly PersistentValue<CurrentNodeInfo> currentNodeInfoStore = new("map.currentNodeInfo", PersistenceMode.GlobalRuntime);
 
     public WorldList WorldList
     {
@@ -30,16 +29,10 @@ public class MapData
         set => worldIndexStore.Set(value);
     }
 
-    public float CurrentDifficulty
+    public CurrentNodeInfo CurrentNodeInfo
     {
-        get => currentDifficultyStore.GetOrDefault(0);
-        set => currentDifficultyStore.Set(value);
-    }
-
-    public NodeType CurrentNodeType
-    {
-        get => currentNodeTypeStore.GetOrDefault(NodeType.Fight);
-        set => currentNodeTypeStore.Set(value);
+        get => currentNodeInfoStore.GetOrDefault(new() { nodeType = NodeType.Fight });
+        set => currentNodeInfoStore.Set(value);
     }
 
     public void Reset()
@@ -47,8 +40,7 @@ public class MapData
         worldListStore.Set(new());
         playerPositionStore.Set(Vector2Int.zero);
         worldIndexStore.Set(0);
-        currentDifficultyStore.Remove();
-        currentNodeTypeStore.Remove();
+        currentNodeInfoStore.Remove();
     }
 
     public void CreateSnapshot(Dictionary<string, string> snapshot)
@@ -67,7 +59,7 @@ public class MapData
 public class RunData
 {
     public readonly PersistentValue<RunState> runStateStore = new("run.runState", PersistenceMode.GlobalPersistence);
-    public readonly PersistentValue<int> seedStore = new("run.seed", PersistenceMode.GlobalPersistence);
+    public readonly PersistentValue<int> seedStore = new("run.Seed", PersistenceMode.GlobalPersistence);
 
     public RunState RunState
     {
@@ -143,12 +135,12 @@ public class PlayerData
 
     public void HealBy(int amount)
     {
-        Health = Mathf.Min(MaxHealth, Health + amount);
+        Health = Mathf.Clamp(Health + amount, 0, MaxHealth);
     }
 
     public void DamageBy(int amount)
     {
-        Health = Mathf.Max(0, Health - amount);
+        Health = Mathf.Clamp(Health - amount, 0, MaxHealth);
     }
 
     public void Reset(int startHealth, int startGold)

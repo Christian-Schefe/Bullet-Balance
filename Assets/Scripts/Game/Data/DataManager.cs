@@ -83,7 +83,7 @@ public class DataManger : MonoBehaviour
 
         InventoryData.AddHazard("cannon", 0);
 
-        print($"Starting new run with seed {seed}");
+        print($"Starting new run with Seed {seed}");
     }
 
     public static void AddGold(int amount)
@@ -106,12 +106,23 @@ public class DataManger : MonoBehaviour
     public static bool DamagePlayer(int amount)
     {
         PlayerData.DamageBy(amount);
-        return PlayerData.Health == 0;
+        if (PlayerData.Health == 0)
+        {
+            Globals<RunManager>.Instance.GameOver();
+            return true;
+        }
+        return false;
     }
 
     public static void IncreaseMaxHealth(int amount)
     {
         PlayerData.MaxHealth += amount;
         PlayerData.HealBy(amount);
+    }
+
+    public static void DecreaseMaxHealth(int amount)
+    {
+        PlayerData.MaxHealth = Mathf.Max(PlayerData.MaxHealth - amount, 1);
+        if (PlayerData.Health > PlayerData.MaxHealth) PlayerData.Health = PlayerData.MaxHealth;
     }
 }
