@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Tweenables;
-using Tweenables.Core;
 using UnityEngine;
 
 public abstract class Enemy
@@ -12,14 +8,18 @@ public abstract class Enemy
     protected EnemyEntity entity;
     protected EnemyObject data;
 
+    private int cycleCooldown;
+
     public Enemy(EnemyEntity entity, EnemyObject data)
     {
         this.entity = entity;
         this.data = data;
-        maxHealth = data.CalculateHealth(DataManger.MapData.WorldIndex, DataManger.MapData.CurrentNodeInfo.difficulty);
+        maxHealth = data.CalculateHealth(DataManager.MapData.WorldIndex, DataManager.MapData.CurrentNodeInfo.difficulty);
         health = maxHealth;
         entity.Healthbar.UpdateHealthBar(health, maxHealth);
         entity.SetSpriteAnimation(data.iconSprites);
+
+        cycleCooldown = data.GetCycleTime(EnemyAction.Spawn);
     }
 
     public EnemyAttackType AttackType => data.AttackType;
@@ -44,16 +44,34 @@ public abstract class Enemy
         entity.AnimateDestroy();
     }
 
-    public void Spawn(float delay)
-    {
-        entity.AnimateSpawn(delay);
-    }
-
-    public abstract void DoAttackAnimation(Vector3 target);
+    public abstract float DoAttackAnimation(Vector3 target);
 
     public int CalculateDamage()
     {
-        return data.CalculateDamage(DataManger.MapData.WorldIndex, DataManger.MapData.CurrentNodeInfo.difficulty);
+        return data.CalculateDamage(DataManager.MapData.WorldIndex, DataManager.MapData.CurrentNodeInfo.difficulty);
+    }
+
+    public EnemyAction? DoCycle(bool canMove, bool canMeleeAttack)
+    {
+        cycleCooldown--;
+        if (cycleCooldown > 0)
+        {
+            return null;
+        }
+
+        EnemyAction action = EnemyAction.Idle;
+
+        if (canMove && MovementType == EnemyMovementType.Moving)
+        {
+            action = EnemyAction.Move;
+        }
+        else if (AttackType == EnemyAttackType.Ranged || canMeleeAttack)
+        {
+            action = EnemyAction.Attack;
+        }
+
+        cycleCooldown = data.GetCycleTime(action);
+        return action;
     }
 }
 

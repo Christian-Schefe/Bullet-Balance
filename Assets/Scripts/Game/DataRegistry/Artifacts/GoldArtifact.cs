@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "HealthArtifact", menuName = "Artifacts/HealthArtifact")]
+[CreateAssetMenu(fileName = "GoldArtifact", menuName = "Artifacts/GoldArtifact")]
 public class GoldArtifact : ArtifactObject
 {
     [SerializeField] private float artifactPriceFactor;
@@ -11,28 +11,20 @@ public class GoldArtifact : ArtifactObject
     [SerializeField] private int afterKillGold;
     [SerializeField] private float goldSpawnRateFactor;
 
-    public override int CalculateArtifactPrice(int price)
+    public override void OnAquire()
     {
-        return Mathf.RoundToInt(price * artifactPriceFactor);
-    }
-
-    public override int CalculateHazardPrice(int price)
-    {
-        return Mathf.RoundToInt(price * hazardPriceFactor);
+        DataManager.StatsData.ArtifactPrice *= artifactPriceFactor;
+        DataManager.StatsData.HazardPrice *= hazardPriceFactor;
+        DataManager.StatsData.GoldSpawnRate *= goldSpawnRateFactor;
     }
 
     public override void OnFinishRound()
     {
-        DataManger.AddGold(afterRoundGold);
+        DataManager.AddGold(afterRoundGold);
     }
 
     public override void OnKillEnemy(Enemy enemy)
     {
-        DataManger.AddGold(afterKillGold);
-    }
-
-    public override float CalculateGoldSpawnRate(float rate)
-    {
-        return rate * goldSpawnRateFactor;
+        DataManager.AddGold(afterKillGold);
     }
 }

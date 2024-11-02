@@ -5,15 +5,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WaveAsset", menuName = "Waves/WaveAsset")]
 public class WaveAsset : ScriptableObject
 {
-    [SerializeField] private List<InitialEnemyData> initialEnemies;
+    [SerializeField] private List<EnemyObject> initialEnemies;
     [SerializeField] private List<DelayedEnemyData> delayedEnemies;
 
     public EnemyWave CreateWave()
     {
         var initials = new Dictionary<int, EnemyObject>();
-        foreach (var data in initialEnemies)
+        for(int i = 0; i < initialEnemies.Count; i++)
         {
-            initials.Add(data.slot, data.enemy);
+            initials.Add(i, initialEnemies[i]);
         }
         var delayed = new List<(float, EnemyObject)>();
         foreach (var data in delayedEnemies)
@@ -22,13 +22,6 @@ public class WaveAsset : ScriptableObject
         }
         var wave = new EnemyWave(initials, delayed);
         return wave;
-    }
-
-    [System.Serializable]
-    public struct InitialEnemyData
-    {
-        public int slot;
-        public EnemyObject enemy;
     }
 
     [System.Serializable]

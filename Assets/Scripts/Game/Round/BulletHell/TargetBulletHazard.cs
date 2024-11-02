@@ -95,7 +95,7 @@ public class TargetBulletHazard : IHazard
 
         var minDuration = settings.spawnFrequency[level] - variances.spawnFrequencyVariance;
         var maxDuration = settings.spawnFrequency[level] + variances.spawnFrequencyVariance;
-        timer = new RandomTimer(minDuration, maxDuration);
+        timer = new RandomTimer(minDuration, maxDuration, 0.1f);
 
         timer.action += TimerAction;
     }
@@ -135,7 +135,7 @@ public class TargetBulletHazard : IHazard
         var instance = arena.CreateBulletObject(bulletPrefab);
         var bullet = new TargetBullet(instance, pos, levelDamage, maxLifetime, t => SpeedCurve(data.speed, t), t => RadiusCurve(data.radius, t), FollowCurve);
         bullet.projectile.Color = settings.bulletColor;
-        arena.AddBullet(bullet);
+        arena.AddTickable(bullet);
     }
 
     private void ShowIndicator(Vector2 position)

@@ -15,13 +15,8 @@ public class RewardInterface : MonoBehaviour
     [SerializeField] private RectTransform upgradeSelector;
     [SerializeField] private PriceButton upgradeButton;
 
-    [SerializeField] private int healAmount;
-    [SerializeField] private int healPrice;
-
     private RunManager runManager;
     private InventoryData inventoryData;
-
-    private int[] upgradePrices = new int[] { 10, 20 };
 
     private List<ClickableIcon> hazardIcons = new();
     private int? selectedIcon;
@@ -32,12 +27,12 @@ public class RewardInterface : MonoBehaviour
     private void Start()
     {
         runManager = Globals<RunManager>.Instance;
-        inventoryData = DataManger.InventoryData;
+        inventoryData = DataManager.InventoryData;
 
         healButton.onClick.AddListener(OnHeal);
-        healButton.SetPrice(GetHealPrice());
-        healButton.Text = $"Heal By {GetHealAmount()}";
-        healButton.AvailableCount = DataManger.PlayerData.Health < DataManger.PlayerData.MaxHealth ? 1 : 0;
+        DataManager.StatsData.healPriceStore.AddSceneListener(OnHealPriceChanged);
+        DataManager.StatsData.healAmountStore.AddSceneListener(OnHealAmountChanged);
+        healButton.AvailableCount = DataManager.PlayerData.Health < DataManager.PlayerData.MaxHealth ? 1 : 0;
 
         finishButton.onClick.AddListener(OnFinish);
         openUpgradeScreenButton.onClick.AddListener(OpenUpgradeScreen);
@@ -50,14 +45,14 @@ public class RewardInterface : MonoBehaviour
         DeselectUpgradeIcon();
     }
 
-    public int GetHealPrice()
+    private void OnHealPriceChanged(bool isPresent, float price)
     {
-        return Globals<ArtifactApplier>.Instance.CalculateHealPrice(healPrice);
+        healButton.SetPrice(Mathf.RoundToInt(price));
     }
 
-    public int GetHealAmount()
+    private void OnHealAmountChanged(bool isPresent, float amount)
     {
-        return Globals<ArtifactApplier>.Instance.CalculateHealAmount(healAmount);
+        healButton.Text = $"Heal By {Mathf.RoundToInt(amount)}";
     }
 
     private void OpenUpgradeScreen()
@@ -78,9 +73,9 @@ public class RewardInterface : MonoBehaviour
         if (selectedIcon is not int index) return;
         if (hasUpgraded) return;
         var level = inventoryData.HazardLevels[index].Item2;
-        if (level > upgradePrices.Length) return;
-        var price = upgradePrices[level];
-        if (!DataManger.TrySpendGold(price)) return;
+        var price = GetUpgradePrice(level);
+        if (price is not int priceValue) return;
+        if (!DataManager.TrySpendGold(priceValue)) return;
 
         hasUpgraded = true;
         upgradeButton.AvailableCount -= 1;
@@ -123,25 +118,32 @@ public class RewardInterface : MonoBehaviour
         upgradeButton.Interactable = false;
     }
 
+    private int? GetUpgradePrice(int level)
+    {
+        var prices = DataManager.StatsData.HazardUpgradePrices;
+        if (level >= prices.Length) return null;
+        return Mathf.RoundToInt(prices[level]);
+    }
+
     private void SelectUpgradeIcon(int index)
     {
         selectedIcon = index;
         upgradeSelector.gameObject.SetActive(true);
         upgradeSelector.transform.position = hazardIcons[index].transform.position;
         var level = inventoryData.HazardLevels[index].Item2;
-        int? price = level < upgradePrices.Length ? upgradePrices[level] : null;
+        int? price = GetUpgradePrice(level);
         upgradeButton.SetPrice(price);
     }
 
     private void OnHeal()
     {
         if (hasHealed) return;
-        if (DataManger.PlayerData.Health >= DataManger.PlayerData.MaxHealth) return;
-        if (!DataManger.TrySpendGold(GetHealPrice())) return;
+        if (DataManager.PlayerData.Health >= DataManager.PlayerData.MaxHealth) return;
+        if (!DataManager.TrySpendGold(Mathf.RoundToInt(DataManager.StatsData.HealPrice))) return;
 
         hasHealed = true;
         healButton.AvailableCount -= 1;
-        DataManger.HealPlayer(GetHealAmount());
+        DataManager.HealPlayer(Mathf.RoundToInt(DataManager.StatsData.HealAmount));
     }
 
     private void OnFinish()

@@ -35,7 +35,7 @@ public class PriceButton : TweenButton
 
     protected override void Awake()
     {
-        DataManger.PlayerData.goldStore.AddSceneListener(OnUpdateGold);
+        DataManager.PlayerData.goldStore.AddSceneListener(OnUpdateGold);
     }
 
     public void SetAvailableCount(int? availableCount)

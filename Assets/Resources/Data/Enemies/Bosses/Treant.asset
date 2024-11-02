@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9169a0aa11efc8d46907d11cc505c68b, type: 3}
+  m_Name: Treant
+  m_EditorClassIdentifier: 
+  enemyName: Treant
+  enemyId: treant
+  iconSprites:
+  - {fileID: 1862426581, guid: e7738d95a1a62bf4e809f76c10dd5e19, type: 3}
+  - {fileID: 1260024206, guid: e7738d95a1a62bf4e809f76c10dd5e19, type: 3}
+  - {fileID: 1430588750, guid: e7738d95a1a62bf4e809f76c10dd5e19, type: 3}
+  - {fileID: 1594486026, guid: e7738d95a1a62bf4e809f76c10dd5e19, type: 3}
+  healthRange: {x: 150, y: 150}
+  damage: 5
+  movementType: 0
+  attackType: 1
+  rangedProjectilePrefab: {fileID: 5514819507152411333, guid: 2a3747da390a3a94cb5e45db268e717b, type: 3}
+  idleCycleTime: 1
+  attackCycleTime: 10
+  moveCycleTime: 10

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b30117383efa0954aadef44c297200fa, type: 3}
+  m_Name: MediumWave1
+  m_EditorClassIdentifier: 
+  initialEnemies:
+  - {fileID: 11400000, guid: d9353d291e0e6074ca8cf51ede1bf60b, type: 2}
+  - {fileID: 11400000, guid: daef535c8eda7d74494c3e7f6c8ce958, type: 2}
+  - {fileID: 11400000, guid: f8fdef8cdd196d042b9c400ab47fe1f4, type: 2}
+  delayedEnemies: []

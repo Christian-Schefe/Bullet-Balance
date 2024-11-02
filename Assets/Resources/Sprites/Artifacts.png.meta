@@ -516,6 +516,174 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Artifacts_Purse
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2319871d732d99345a0fb97d65da7b23
+      internalID: 1604133338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Artifacts_Diamond
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6642ac7135ab0164abe41ecc7dcb1ad2
+      internalID: 503916624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Artifacts_Shopping_Cart
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c0be603d3bed344f8dc162106f42ea6
+      internalID: -1994301811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Artifacts_Helmet
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b82187c541c79074aba016b80e4d03dc
+      internalID: -25370943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Artifacts_Piggy_Bank
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9ac6b10325a9c242ad51bfe67442d05
+      internalID: -1804382191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Artifacts_Spike_Ball
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4503cf43ba901f7418cae0077dfcd21a
+      internalID: -1726094739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Artifacts_Heart_Flower
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 258
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8eb5d34cc4596c4da22a69ad8d77bb2
+      internalID: 945931599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Artifacts_Snowflake
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 188875b2e1e1a7b44be453c07c1c423e
+      internalID: 2096006816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -533,17 +701,25 @@ TextureImporter:
       Artifacts_Clock: 18829152
       Artifacts_Cookie: -1615012565
       Artifacts_Cube: -1680505783
+      Artifacts_Diamond: 503916624
       Artifacts_Eye: -1562084415
       Artifacts_Flag: -78396043
+      Artifacts_Heart_Flower: 945931599
+      Artifacts_Helmet: -25370943
       Artifacts_Ingot: 34825258
       Artifacts_Key: 181154780
       Artifacts_Leaf: -764089197
       Artifacts_Medkit: -674130477
       Artifacts_Mirror: 1987161225
       Artifacts_Necklace: 2136573970
+      Artifacts_Piggy_Bank: -1804382191
+      Artifacts_Purse: 1604133338
       Artifacts_Ring: -549258646
       Artifacts_Shield: 1695936328
+      Artifacts_Shopping_Cart: -1994301811
+      Artifacts_Snowflake: 2096006816
       Artifacts_Speed: -1251093771
+      Artifacts_Spike_Ball: -1726094739
       Artifacts_Star: 843168359
       Artifacts_Sword: 1748457764
       Artifacts_Tree: -924748646

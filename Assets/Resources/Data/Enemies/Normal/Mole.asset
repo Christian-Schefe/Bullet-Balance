@@ -21,6 +21,9 @@ MonoBehaviour:
   - {fileID: 2143890182, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
   healthRange: {x: 20, y: 50}
   damage: 2
-  movementType: 1
+  movementType: 0
   attackType: 1
-  rangedProjectilePrefab: {fileID: 5514819507152411333, guid: 08b9b18cdcadd0d449e072c180273201, type: 3}
+  rangedProjectilePrefab: {fileID: 5514819507152411333, guid: 2a3747da390a3a94cb5e45db268e717b, type: 3}
+  idleCycleTime: 1
+  attackCycleTime: 5
+  moveCycleTime: 5

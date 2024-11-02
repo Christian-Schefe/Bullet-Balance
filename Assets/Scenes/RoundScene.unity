@@ -549,6 +549,7 @@ MonoBehaviour:
   enemyEntityPrefab: {fileID: 971179471050549729, guid: 08e7a690c58dc3544b81aed4a1aeae37, type: 3}
   arena: {fileID: 623622131}
   slotCount: 6
+  cycleTime: 1
   fromPos: {fileID: 508716638}
   toPos: {fileID: 1281781807}
   playerTarget: {fileID: 763948807}

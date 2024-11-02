@@ -12,8 +12,8 @@ public class HealthCounter : MonoBehaviour
 
     private void Awake()
     {
-        DataManger.PlayerData.healthStore.AddListener(ListenerLifetime.Scene, OnHealthChanged);
-        DataManger.PlayerData.maxHealthStore.AddListener(ListenerLifetime.Scene, OnMaxHealthChanged);
+        DataManager.PlayerData.healthStore.AddListener(ListenerLifetime.Scene, OnHealthChanged);
+        DataManager.PlayerData.maxHealthStore.AddListener(ListenerLifetime.Scene, OnMaxHealthChanged);
     }
 
     private void OnHealthChanged(bool isPresent, int health)

@@ -26,9 +26,9 @@ MonoBehaviour:
   - 4
   - 5
   radius:
-  - 0.2
   - 0.3
-  - 0.4
+  - 0.45
+  - 0.6
   follow:
   - 0
   - 0

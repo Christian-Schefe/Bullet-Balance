@@ -11,11 +11,11 @@ public class HealthEvent : EventObject
     public override void ExecuteChoice(int index)
     {
         var choice = choices[index];
-        if (choice.healBy > 0) DataManger.HealPlayer(choice.healBy);
-        else if (choice.healBy < 0) DataManger.DamagePlayer(-choice.healBy);
+        if (choice.healBy > 0) DataManager.HealPlayer(choice.healBy);
+        else if (choice.healBy < 0) DataManager.DamagePlayer(-choice.healBy);
 
-        if (choice.increaseMaxHealthBy > 0) DataManger.IncreaseMaxHealth(choice.increaseMaxHealthBy);
-        else if (choice.increaseMaxHealthBy < 0) DataManger.DecreaseMaxHealth(-choice.increaseMaxHealthBy);
+        if (choice.increaseMaxHealthBy > 0) DataManager.IncreaseMaxHealth(choice.increaseMaxHealthBy);
+        else if (choice.increaseMaxHealthBy < 0) DataManager.DecreaseMaxHealth(-choice.increaseMaxHealthBy);
     }
 
     public override int GetChoiceCount()

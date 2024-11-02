@@ -50,6 +50,9 @@ public class EnemyEntity : MonoBehaviour
         this.sprites = sprites;
         sprite.sprite = sprites[0];
         spriteIndex = 0;
+
+        var maxHeight = sprites[0].bounds.max.y;
+        healthbar.transform.localPosition = new Vector3(0, maxHeight, 0);
     }
 
     public void AnimateTakeDamage(int damage)
@@ -79,13 +82,14 @@ public class EnemyEntity : MonoBehaviour
         this.TweenScale().From(Vector3.zero).To(Vector3.one).Delay(delay).Duration(0.5f).Ease(Easing.CubicOut).RunNew();
     }
 
-    public void AnimateMeleeAttack(Vector3 to)
+    public void AnimateMeleeAttack(Vector3 to, float duration)
     {
-        this.TweenPosition().To(to).Duration(0.3f).Ease(Easing.CubicInOut).PingPong(2).RunQueued(ref runner);
+        this.TweenPosition().To(to).Duration(duration).Ease(Easing.CubicInOut).PingPong(2).RunQueued(ref runner);
     }
 
-    public void AnimateRangedAttack(Transform target, Vector3 to, System.Action onFinish)
+    public void AnimateRangedAttack(Transform target, Vector3 to, System.Action onFinish, float speed, out float duration)
     {
-        this.TweenPosition(target).To(to).Duration(0.3f).Ease(Easing.CubicIn).OnFinally(onFinish).RunQueued(ref runner);
+        duration = speed * Vector3.Distance(target.transform.position, to);
+        this.TweenPosition(target).To(to).Duration(duration).Ease(Easing.Linear).OnFinally(onFinish).RunQueued(ref runner);
     }
 }

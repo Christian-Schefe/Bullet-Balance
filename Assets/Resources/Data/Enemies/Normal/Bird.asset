@@ -24,3 +24,6 @@ MonoBehaviour:
   movementType: 1
   attackType: 0
   rangedProjectilePrefab: {fileID: 5514819507152411333, guid: 08b9b18cdcadd0d449e072c180273201, type: 3}
+  idleCycleTime: 1
+  attackCycleTime: 5
+  moveCycleTime: 2

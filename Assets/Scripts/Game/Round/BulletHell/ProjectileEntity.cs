@@ -54,14 +54,14 @@ public class ProjectileEntity : MonoBehaviour
         transform.localScale = 2 * radius * Vector3.one;
     }
 
-    public void AnimateDestroy(bool instant)
+    public void AnimateDestroy(float duration, bool instant)
     {
         if (instant)
         {
             Destroy(gameObject);
             return;
         }
-        this.TweenScale().To(Vector3.zero).Duration(0.1f).OnComplete(() => Destroy(gameObject)).RunNew();
+        this.TweenScale().To(Vector3.zero).Duration(duration).Ease(Easing.CubicIn).OnComplete(() => Destroy(gameObject)).RunNew();
     }
 
     public bool IsCollidingWith(Collider2D other)

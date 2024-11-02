@@ -8,6 +8,7 @@ public class SimpleEnemy : EnemyObject
     [SerializeField] private EnemyMovementType movementType;
     [SerializeField] private EnemyAttackType attackType;
     [SerializeField] private GameObject rangedProjectilePrefab;
+    [SerializeField] private int idleCycleTime, attackCycleTime, moveCycleTime;
 
     public override EnemyMovementType MovementType => movementType;
 
@@ -33,5 +34,17 @@ public class SimpleEnemy : EnemyObject
         {
             return new RangedEnemy(rangedProjectilePrefab, entity, this);
         }
+    }
+
+    public override int GetCycleTime(EnemyAction action)
+    {
+        return action switch
+        {
+            EnemyAction.Idle => idleCycleTime,
+            EnemyAction.Attack => attackCycleTime,
+            EnemyAction.Move => moveCycleTime,
+            EnemyAction.Spawn => Mathf.Max(attackCycleTime, moveCycleTime),
+            _ => 1
+        };
     }
 }

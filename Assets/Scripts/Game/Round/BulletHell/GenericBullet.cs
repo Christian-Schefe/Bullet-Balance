@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Tweenables;
 using UnityEngine;
 
-public abstract class GenericBullet : Projectile
+public abstract class GenericBullet : ITickable
 {
     public ProjectileEntity projectile;
 
@@ -32,27 +29,6 @@ public abstract class GenericBullet : Projectile
         projectile.Radius = radius(0);
     }
 
-    public override void DealEnemyDamage(TopFight topFight)
-    {
-        topFight.DealDamageFront(damage);
-    }
-
-    public override void DealPlayerDamage(TopFight topFight)
-    {
-        topFight.AttackPlayer(damage);
-    }
-
-    public override bool IsHit(Player player)
-    {
-        return projectile.IsCollidingWith(player.Collider);
-    }
-
-    public override void HandleDestroy(bool playerHit)
-    {
-        bool instantDestroy = !playerHit;
-        projectile.AnimateDestroy(instantDestroy);
-    }
-
     protected abstract void UpdatePosition(float timeLived, out Vector2 dir);
 
     protected virtual bool PreventDestruction()
@@ -60,7 +36,7 @@ public abstract class GenericBullet : Projectile
         return false;
     }
 
-    public override void Tick(float time, out bool shouldDestroy)
+    public void Tick(float time)
     {
         var timeLived = time - spawnTime;
 
@@ -69,8 +45,25 @@ public abstract class GenericBullet : Projectile
         projectile.Dir = dir;
         projectile.Radius = radius(timeLived);
 
-        shouldDestroy = timeLived > 1 && projectile.IsOutside(arena);
+        var shouldDestroy = timeLived > 1 && projectile.IsOutside(arena);
         shouldDestroy |= maxLifetime is float t && timeLived > t;
         if (PreventDestruction()) shouldDestroy = false;
+
+        if (shouldDestroy)
+        {
+            arena.TopFight.DealDamageFront(damage);
+            projectile.AnimateDestroy(0.0f, true);
+        }
+        else if (projectile.IsCollidingWith(arena.Player.Collider))
+        {
+            shouldDestroy = true;
+            arena.TopFight.AttackPlayer(damage);
+            projectile.AnimateDestroy(0.1f, false);
+        }
+
+        if (shouldDestroy)
+        {
+            arena.ScheduleRemoveTickable(this);
+        }
     }
 }

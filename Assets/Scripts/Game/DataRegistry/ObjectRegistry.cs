@@ -14,7 +14,7 @@ public abstract class ObjectRegistry<T> : ScriptableObject where T : ScriptableO
         objectsById = new Dictionary<string, T>();
         foreach (var hazard in objects)
         {
-            objectsById[hazard.Id] = hazard;
+            objectsById.Add(hazard.Id, hazard);
         }
     }
 

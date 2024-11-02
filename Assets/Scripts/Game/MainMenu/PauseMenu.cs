@@ -31,7 +31,7 @@ public class PauseMenu : MonoBehaviour, IWindow
 
     private void OnResetSettingsButtonClicked()
     {
-        DataManger.SettingsData.Reset();
+        DataManager.SettingsData.Reset();
     }
 
     private void OnMainMenuButtonClicked()

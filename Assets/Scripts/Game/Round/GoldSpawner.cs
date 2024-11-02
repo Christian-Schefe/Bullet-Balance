@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Tweenables;
 using UnityEngine;
 
-public class GoldSpawner : MonoBehaviour
+public class GoldSpawner : MonoBehaviour, ITickable
 {
     [SerializeField] private Arena arena;
     [SerializeField] private GameObject goldPrefab;
@@ -20,7 +20,8 @@ public class GoldSpawner : MonoBehaviour
     private void Awake()
     {
         goldPositions = new();
-        timer = new RandomTimer(5, 10);
+        var spawnRate = DataManager.StatsData.GoldSpawnRate;
+        timer = new SimpleTimer(1.0f / spawnRate);
         timer.action = (_) => SpawnGold();
     }
 

@@ -14,9 +14,11 @@ public class ShopInterface : MonoBehaviour
     private List<string> artifactTypes = new();
     private readonly List<(string, int)?> hazardTypes = new();
 
+    private List<BuyOption> artifactOptions = new(), hazardOptions = new();
+
     public void Awake()
     {
-        var rng = new SeededRandom(DataManger.MapData.CurrentNodeInfo.sceneSeed);
+        var rng = new SeededRandom(DataManager.MapData.CurrentNodeInfo.sceneSeed);
 
         artifactTypes = RandomArtifactTypes(rng, artifactCount, artifactRegistry);
         var hazardIds = RandomHazardTypes(rng, hazardCount, hazardRegistry);
@@ -28,14 +30,13 @@ public class ShopInterface : MonoBehaviour
             BuyOption option = Instantiate(shopOptionPrefab, artifactsContainer);
 
             var index = i;
-            var price = ArtifactPrice();
             option.Icon.Sprite = artifact.iconSprite;
             option.Name = artifact.artifactName;
-            option.Price = price;
             option.AvailableCount = 1;
-            option.OnClick.AddListener(() => BuyArtifact(option, index, price));
+            option.OnClick.AddListener(() => BuyArtifact(option, index));
             option.Icon.Level = null;
             option.Icon.GetTooltip().SetData(artifact.GetTooltipData());
+            artifactOptions.Add(option);
         }
 
         for (var i = 0; i < hazardIds.Count; i++)
@@ -48,57 +49,74 @@ public class ShopInterface : MonoBehaviour
             hazardTypes.Add((type, level));
 
             var index = i;
-            var price = HazardPrice(level);
             option.Icon.Sprite = hazard.iconSprite;
             option.Name = hazard.hazardName;
-            option.Price = price;
             option.AvailableCount = 1;
-            option.OnClick.AddListener(() => BuyHazard(option, index, price));
+            option.OnClick.AddListener(() => BuyHazard(option, index));
             option.Icon.Level = null;
             option.Icon.GetTooltip().SetData(hazard.GetTooltipData(level));
+            hazardOptions.Add(option);
+        }
+
+        DataManager.StatsData.hazardPriceStore.AddSceneListener(OnHazardPriceChanged);
+        DataManager.StatsData.artifactPriceStore.AddSceneListener(OnArtifactPriceChanged);
+    }
+
+    private void OnHazardPriceChanged(bool isPresent, float price)
+    {
+        var intPrice = Mathf.RoundToInt(price);
+        foreach (var option in hazardOptions)
+        {
+            option.Price = intPrice;
         }
     }
 
-    private void BuyArtifact(BuyOption option, int index, int price)
+    private void OnArtifactPriceChanged(bool isPresent, float price)
+    {
+        var intPrice = Mathf.RoundToInt(price);
+        foreach (var option in artifactOptions)
+        {
+            option.Price = intPrice;
+        }
+    }
+
+    private void BuyArtifact(BuyOption option, int index)
     {
         var type = artifactTypes[index];
         if (type is null) return;
-        if (!DataManger.TrySpendGold(price)) return;
+        if (option.Price is not int p || !DataManager.TrySpendGold(p)) return;
 
         artifactTypes[index] = null;
         option.AvailableCount -= 1;
 
-        print("Bought " + type);
-        DataManger.InventoryData.AddArtifact(type);
+        DataManager.InventoryData.AddArtifact(type);
     }
 
-    private void BuyHazard(BuyOption option, int index, int price)
+    private void BuyHazard(BuyOption option, int index)
     {
         var data = hazardTypes[index];
         if (data is not (string type, int level)) return;
-        if (!DataManger.TrySpendGold(price)) return;
+        if (option.Price is not int p || !DataManager.TrySpendGold(p)) return;
 
         hazardTypes[index] = null;
         option.AvailableCount -= 1;
 
-        DataManger.InventoryData.AddHazard(type, level);
+        DataManager.InventoryData.AddHazard(type, level);
     }
 
-    public static int HazardPrice(int level)
+    public static int HazardPrice()
     {
-        var basePrice = 15 + 10 * level;
-        return Globals<ArtifactApplier>.Instance.CalculateHazardPrice(basePrice);
+        return Mathf.RoundToInt(DataManager.StatsData.HazardPrice);
     }
 
     public static int ArtifactPrice()
     {
-        var basePrice = 15;
-        return Globals<ArtifactApplier>.Instance.CalculateArtifactPrice(basePrice);
+        return Mathf.RoundToInt(DataManager.StatsData.ArtifactPrice);
     }
 
     public static List<string> RandomArtifactTypes(SeededRandom rng, int amount, ArtifactRegistry registry)
     {
-        var owned = DataManger.InventoryData.Artifacts;
+        var owned = DataManager.InventoryData.Artifacts;
 
         var notOwned = new List<string>();
 

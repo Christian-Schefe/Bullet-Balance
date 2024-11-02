@@ -10,8 +10,8 @@ public class WaveGenerator : MonoBehaviour
 
     public EnemyWave GenerateWave(WaveType waveType)
     {
-        int worldIndex = DataManger.MapData.WorldIndex;
-        float worldProgress = DataManger.MapData.CurrentNodeInfo.difficulty;
+        int worldIndex = DataManager.MapData.WorldIndex;
+        float worldProgress = DataManager.MapData.CurrentNodeInfo.difficulty;
 
         var collections = waveType switch
         {
@@ -22,7 +22,7 @@ public class WaveGenerator : MonoBehaviour
         };
         var collection = collections[Mathf.Min(worldIndex, collections.Count - 1)];
 
-        var rng = new SeededRandom(DataManger.MapData.CurrentNodeInfo.sceneSeed);
+        var rng = new SeededRandom(DataManager.MapData.CurrentNodeInfo.sceneSeed);
         return collection.GetRandomWave(rng, worldProgress);
     }
 }

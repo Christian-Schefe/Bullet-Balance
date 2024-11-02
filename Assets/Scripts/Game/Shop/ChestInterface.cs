@@ -19,7 +19,7 @@ public class ChestInterface : MonoBehaviour
 
     public void Awake()
     {
-        var rng = new SeededRandom(DataManger.MapData.CurrentNodeInfo.sceneSeed);
+        var rng = new SeededRandom(DataManager.MapData.CurrentNodeInfo.sceneSeed);
         artifactTypes = ShopInterface.RandomArtifactTypes(rng, artifactCount, artifactRegistry);
 
         for (var i = 0; i < artifactTypes.Count; i++)
@@ -51,10 +51,10 @@ public class ChestInterface : MonoBehaviour
     private void ChooseArtifact()
     {
         if (selectedArtifact == null) return;
-        if (!isFree && !DataManger.TrySpendGold(ShopInterface.ArtifactPrice())) return;
+        if (!isFree && !DataManager.TrySpendGold(ShopInterface.ArtifactPrice())) return;
 
         var type = artifactTypes[selectedArtifact.Index];
-        DataManger.InventoryData.AddArtifact(type);
+        DataManager.InventoryData.AddArtifact(type);
         chooseArtifactButton.AvailableCount--;
 
         foreach (var option in chooseOptions)

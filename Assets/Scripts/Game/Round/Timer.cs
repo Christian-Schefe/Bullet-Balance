@@ -37,12 +37,12 @@ public class RandomTimer : Timer
     public float timeOffset;
     private float currentDuration;
 
-    public RandomTimer(float minDuration, float maxDuration)
+    public RandomTimer(float minDuration, float maxDuration, float minInitialWait)
     {
         this.minDuration = minDuration;
         this.maxDuration = maxDuration;
         timeOffset = 0;
-        currentDuration = Random.Range(minDuration, maxDuration + minDuration);
+        currentDuration = Random.Range(minInitialWait, Mathf.Max(minInitialWait, maxDuration));
     }
 
     public override void Tick(float time)

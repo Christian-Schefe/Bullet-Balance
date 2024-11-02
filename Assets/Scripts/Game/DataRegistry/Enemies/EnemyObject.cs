@@ -15,6 +15,7 @@ public abstract class EnemyObject : ScriptableObject, IRegistryObject
 
     public abstract int CalculateDamage(int worldIndex, float worldProgress);
     public abstract int CalculateHealth(int worldIndex, float worldProgress);
+    public abstract int GetCycleTime(EnemyAction action);
 
     public abstract Enemy CreateEnemy(EnemyEntity entity);
 }

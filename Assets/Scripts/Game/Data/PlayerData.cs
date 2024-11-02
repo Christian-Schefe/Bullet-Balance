@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Yeast;
 
-public class MapData
+public class MapData : ISnapshotable
 {
     public readonly PersistentValue<WorldList> worldListStore = new("map.worldList", PersistenceMode.GlobalPersistence);
     public readonly PersistentValue<Vector2Int> playerPositionStore = new("map.playerPosition", PersistenceMode.GlobalPersistence);
@@ -109,7 +109,7 @@ public class SettingsData
     }
 }
 
-public class PlayerData
+public class PlayerData : ISnapshotable
 {
     public readonly PersistentValue<int> healthStore = new("player.health", PersistenceMode.GlobalPersistence);
     public readonly PersistentValue<int> maxHealthStore = new("player.maxHealth", PersistenceMode.GlobalPersistence);
@@ -165,7 +165,83 @@ public class PlayerData
     }
 }
 
-public class InventoryData
+public class StatsData : ISnapshotable
+{
+    public readonly PersistentValue<float> healPriceStore = new("stats.healPrice", PersistenceMode.GlobalPersistence);
+    public readonly PersistentValue<float> artifactPriceStore = new("stats.artifactPrice", PersistenceMode.GlobalPersistence);
+    public readonly PersistentValue<float> hazardPriceStore = new("stats.hazardPrice", PersistenceMode.GlobalPersistence);
+    public readonly PersistentValue<float[]> hazardUpgradePricesStore = new("stats.hazardUpgradePrices", PersistenceMode.GlobalPersistence);
+    public readonly PersistentValue<float> goldSpawnRateStore = new("stats.goldSpawnRate", PersistenceMode.GlobalPersistence);
+    public readonly PersistentValue<float> healAmountStore = new("stats.healAmount", PersistenceMode.GlobalPersistence);
+
+    public float HealPrice
+    {
+        get => healPriceStore.Get();
+        set => healPriceStore.Set(value);
+    }
+
+    public float ArtifactPrice
+    {
+        get => artifactPriceStore.Get();
+        set => artifactPriceStore.Set(value);
+    }
+
+    public float HazardPrice
+    {
+        get => hazardPriceStore.Get();
+        set => hazardPriceStore.Set(value);
+    }
+
+    public float[] HazardUpgradePrices
+    {
+        get => hazardUpgradePricesStore.Get();
+        set => hazardUpgradePricesStore.Set(value);
+    }
+
+    public float GoldSpawnRate
+    {
+        get => goldSpawnRateStore.Get();
+        set => goldSpawnRateStore.Set(value);
+    }
+
+    public float HealAmount
+    {
+        get => healAmountStore.Get();
+        set => healAmountStore.Set(value);
+    }
+
+    public void Reset()
+    {
+        HealPrice = 10;
+        ArtifactPrice = 10;
+        HazardPrice = 15;
+        HazardUpgradePrices = new float[] { 10, 20 };
+        GoldSpawnRate = 0.2f;
+        HealAmount = 10;
+    }
+
+    public void CreateSnapshot(Dictionary<string, string> snapshot)
+    {
+        snapshot[healPriceStore.Key] = HealPrice.ToJson();
+        snapshot[artifactPriceStore.Key] = ArtifactPrice.ToJson();
+        snapshot[hazardPriceStore.Key] = HazardPrice.ToJson();
+        snapshot[hazardUpgradePricesStore.Key] = HazardUpgradePrices.ToJson();
+        snapshot[goldSpawnRateStore.Key] = GoldSpawnRate.ToJson();
+        snapshot[healAmountStore.Key] = HealAmount.ToJson();
+    }
+
+    public void ApplySnapshot(Dictionary<string, string> snapshot)
+    {
+        HealPrice = snapshot[healPriceStore.Key].FromJson<float>();
+        ArtifactPrice = snapshot[artifactPriceStore.Key].FromJson<float>();
+        HazardPrice = snapshot[hazardPriceStore.Key].FromJson<float>();
+        HazardUpgradePrices = snapshot[hazardUpgradePricesStore.Key].FromJson<float[]>();
+        GoldSpawnRate = snapshot[goldSpawnRateStore.Key].FromJson<float>();
+        HealAmount = snapshot[healAmountStore.Key].FromJson<float>();
+    }
+}
+
+public class InventoryData : ISnapshotable
 {
     public readonly PersistentValue<List<(string, int)>> hazardLevelsStore = new("hazardLevelsStore", PersistenceMode.GlobalPersistence);
     public readonly PersistentValue<HashSet<string>> artifactsStore = new("artifactsStore", PersistenceMode.GlobalPersistence);

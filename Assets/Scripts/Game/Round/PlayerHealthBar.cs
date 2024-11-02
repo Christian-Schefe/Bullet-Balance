@@ -11,7 +11,7 @@ public class PlayerHealthBar : MonoBehaviour
 
     private void Awake()
     {
-        playerData = DataManger.PlayerData;
+        playerData = DataManager.PlayerData;
 
         playerData.healthStore.AddListener(ListenerLifetime.Scene, (_, _) => UpdateHealthBar());
         playerData.maxHealthStore.AddListener(ListenerLifetime.Scene, (_, _) => UpdateHealthBar());

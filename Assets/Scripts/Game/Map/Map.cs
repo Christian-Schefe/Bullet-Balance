@@ -15,13 +15,13 @@ public class Map : MonoBehaviour
     private SeededRandom random;
 
     private Node CurrentNode => world.GetNode(PlayerPosition);
-    private WorldLayout WorldData => DataManger.MapData.WorldList.worlds[DataManger.MapData.WorldIndex];
-    private MapData MapData => DataManger.MapData;
+    private WorldLayout WorldData => DataManager.MapData.WorldList.worlds[DataManager.MapData.WorldIndex];
+    private MapData MapData => DataManager.MapData;
     private Vector2Int PlayerPosition => MapData.PlayerPosition;
 
     private void Awake()
     {
-        random = new SeededRandom(DataManger.RunData.Seed);
+        random = new SeededRandom(DataManager.RunData.Seed);
 
         if (MapData.WorldList.worlds == null)
         {
@@ -63,7 +63,7 @@ public class Map : MonoBehaviour
 
     private void Start()
     {
-        Globals<DataManger>.Instance.CreateSnapshot();
+        Globals<DataManager>.Instance.CreateSnapshot();
 
         positionIndicator = Instantiate(positionIndicatorPrefab);
 
@@ -125,7 +125,7 @@ public class Map : MonoBehaviour
         if (!selectableNodes.Contains(node)) return;
 
         SetPlayerPosition(node.Position, false);
-        var sceneType = world.GetSceneType(DataManger.MapData.PlayerPosition);
+        var sceneType = world.GetSceneType(DataManager.MapData.PlayerPosition);
 
         this.TweenDelayedAction(() =>
         {
@@ -135,7 +135,7 @@ public class Map : MonoBehaviour
 
     private void SetPlayerPosition(Vector2Int position, bool allowSelection)
     {
-        DataManger.MapData.PlayerPosition = position;
+        DataManager.MapData.PlayerPosition = position;
         positionIndicator.AnimateMove(CurrentNode);
 
         if (allowSelection) selectableNodes = world.GetConnectedNodes(position);
@@ -145,7 +145,7 @@ public class Map : MonoBehaviour
 
         var difficulty = Mathf.Clamp01((float)(position.y - 1) / (WorldData.connections.Count - 3));
         var nodeType = curNodeType.FunctionalType;
-        DataManger.MapData.CurrentNodeInfo = new(difficulty, nodeType, curNodeType.sceneSeed);
+        DataManager.MapData.CurrentNodeInfo = new(difficulty, nodeType, curNodeType.sceneSeed);
 
         foreach (var node in world.Nodes)
         {
@@ -267,7 +267,7 @@ public static class MapConnectionGenerator
     public static List<List<List<int>>> GenerateRandomConnections(SeededRandom random)
     {
         List<List<List<int>>> connections = new();
-        int layerCount = random.IntRangeInclusive(9, 11);
+        int layerCount = random.IntRangeInclusive(11, 14);
 
         int prevNodeCount = 0;
 

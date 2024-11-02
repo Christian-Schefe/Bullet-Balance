@@ -83,7 +83,7 @@ public class PathBulletHazard : IHazard
 
         var minDuration = settings.spawnFrequency[level] - variances.spawnFrequencyVariance;
         var maxDuration = settings.spawnFrequency[level] + variances.spawnFrequencyVariance;
-        timer = new RandomTimer(minDuration, maxDuration);
+        timer = new RandomTimer(minDuration, maxDuration, 0.1f);
 
         timer.action += TimerAction;
     }
@@ -158,7 +158,7 @@ public class PathBulletHazard : IHazard
         var speedFactor = data.speed / ApproxPathLength(path);
         var bullet = new PathBullet(instance, levelDamage, maxLifetime, t => SpeedCurve(speedFactor, t), t => RadiusCurve(data.radius, t), path);
         bullet.projectile.Color = settings.bulletColor;
-        arena.AddBullet(bullet);
+        arena.AddTickable(bullet);
     }
 
     private void ShowIndicator(Vector2 position, System.Func<float, Vector2> path)

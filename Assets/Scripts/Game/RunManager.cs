@@ -13,7 +13,7 @@ public class RunManager : MonoBehaviour
 
     public void ContinueRun()
     {
-        Globals<DataManger>.Instance.ContinueRun();
+        Globals<DataManager>.Instance.ContinueRun();
         LoadScene(SceneType.Map);
     }
 
@@ -36,25 +36,25 @@ public class RunManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.U))
         {
-            DataManger.PlayerData.Gold += 10;
+            DataManager.PlayerData.Gold += 10;
         }
     }
 
     public void StartNewRun()
     {
-        Globals<DataManger>.Instance.StartNewRun();
+        Globals<DataManager>.Instance.StartNewRun();
         LoadScene(SceneType.Map);
     }
 
     public void GameOver()
     {
-        DataManger.RunData.RunState = RunState.GameOver;
+        DataManager.RunData.RunState = RunState.GameOver;
         LoadScene(SceneType.GameOver);
     }
 
     public void Win()
     {
-        DataManger.RunData.RunState = RunState.Win;
+        DataManager.RunData.RunState = RunState.Win;
         LoadScene(SceneType.GameOver);
     }
 

@@ -13,26 +13,18 @@ public class HealthArtifact : ArtifactObject
 
     public override void OnAquire()
     {
-        DataManger.IncreaseMaxHealth(addedMaxHealth);
+        DataManager.IncreaseMaxHealth(addedMaxHealth);
+        DataManager.StatsData.HealPrice *= healPriceFactor;
+        DataManager.StatsData.HealAmount *= healAmountFactor;
     }
 
     public override void OnFinishRound()
     {
-        DataManger.HealPlayer(afterRoundHeal);
+        DataManager.HealPlayer(afterRoundHeal);
     }
 
     public override void OnKillEnemy(Enemy enemy)
     {
-        DataManger.HealPlayer(afterKillHeal);
-    }
-
-    public override int CalculateHealPrice(int price)
-    {
-        return Mathf.RoundToInt(price * healPriceFactor);
-    }
-
-    public override int CalculateHealAmount(int amount)
-    {
-        return Mathf.RoundToInt(amount * healAmountFactor);
+        DataManager.HealPlayer(afterKillHeal);
     }
 }

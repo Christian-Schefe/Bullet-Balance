@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static TreeEditor.TreeEditorHelper;
 
 public class Arena : MonoBehaviour
 {
@@ -12,17 +13,16 @@ public class Arena : MonoBehaviour
     [SerializeField] private GoldSpawner goldSpawner;
 
     private RunManager runManager;
-    private PlayerData playerData;
     private InventoryData inventoryData;
 
-    private List<IHazard> hazards = new();
-    private List<Projectile> bullets = new();
+    private readonly List<ITickable> tickables = new();
 
     public Vector2 MinCorner => minCorner.position;
     public Vector2 MaxCorner => maxCorner.position;
     public float Width => maxCorner.position.x - minCorner.position.x;
     public float Height => maxCorner.position.y - minCorner.position.y;
     public Player Player => player;
+    public TopFight TopFight => topFight;
     public float GameTime => time;
 
     private float time;
@@ -31,20 +31,23 @@ public class Arena : MonoBehaviour
 
     private bool isPauseMenuOpen, isInventoryOpen;
 
+    private readonly List<ITickable> tickablesToRemove = new();
+
     private void Awake()
     {
         time = 0;
         runManager = Globals<RunManager>.Instance;
-        playerData = DataManger.PlayerData;
-        inventoryData = DataManger.InventoryData;
+        inventoryData = DataManager.InventoryData;
         isDone = false;
         isPaused = false;
 
         Signals.Get<PauseMenuIsOpen>().AddSceneListener(OnPauseMenuIsOpenChanged);
         Signals.Get<InventoryIsOpen>().AddSceneListener(OnInventoryIsOpenChanged);
 
-        SpawnHazards();
+        tickables.Add(player);
+        tickables.Add(goldSpawner);
 
+        SpawnHazards();
     }
 
     private void Update()
@@ -52,42 +55,25 @@ public class Arena : MonoBehaviour
         if (isDone || isPaused) return;
         time += Time.deltaTime;
 
-        player.Tick(time);
-        goldSpawner.Tick(time);
-
-        foreach (IHazard hazard in hazards)
+        foreach (ITickable tickable in tickablesToRemove)
         {
-            hazard.Tick(time);
+            tickables.Remove(tickable);
         }
+        tickablesToRemove.Clear();
 
-        var bulletsToRemove = new List<Projectile>();
-
-        foreach (Projectile bullet in bullets)
+        foreach (ITickable tickable in tickables)
         {
-            bullet.Tick(time, out var shouldDestroy);
-            if (shouldDestroy)
-            {
-                bulletsToRemove.Add(bullet);
-                bullet.DealEnemyDamage(topFight);
-                bullet.HandleDestroy(false);
-            }
-            else if (bullet.IsHit(player))
-            {
-                bulletsToRemove.Add(bullet);
-                bullet.DealPlayerDamage(topFight);
-                bullet.HandleDestroy(true);
-            }
-        }
-
-        foreach (Projectile bullet in bulletsToRemove)
-        {
-            bullets.Remove(bullet);
+            tickable.Tick(time);
         }
 
         topFight.Tick(time, out var hasPlayerWon);
 
         if (hasPlayerWon)
         {
+            if (DataManager.MapData.CurrentNodeInfo.nodeType == NodeType.Boss)
+            {
+                DataManager.PlayerData.HealBy(DataManager.PlayerData.MaxHealth);
+            }
             Signals.Get<ArenaOnWinFight>().Dispatch();
             runManager.LoadScene(SceneType.Reward);
             isDone = true;
@@ -108,24 +94,23 @@ public class Arena : MonoBehaviour
 
     private void SpawnHazards()
     {
-        var hazardList = inventoryData.HazardLevels;
+        var hazardList = DataManager.InventoryData.HazardLevels;
         foreach (var (hazardId, level) in hazardList)
         {
-            print("Spawning hazardId " + hazardId + " level " + level);
             var hazard = hazardRegistry.Lookup(hazardId).CreateHazard();
-            hazards.Add(hazard);
+            tickables.Add(hazard);
             hazard.Init(this, level);
         }
     }
 
     public void CollectGold(int amount)
     {
-        DataManger.AddGold(amount);
+        DataManager.AddGold(amount);
     }
 
     public void DealDamage(int damage)
     {
-        if (DataManger.DamagePlayer(damage))
+        if (DataManager.DamagePlayer(damage))
         {
             isDone = true;
         }
@@ -137,9 +122,14 @@ public class Arena : MonoBehaviour
         return instance;
     }
 
-    public void AddBullet(Projectile bullet)
+    public void AddTickable(ITickable tickable)
     {
-        bullets.Add(bullet);
+        tickables.Add(tickable);
+    }
+
+    public void ScheduleRemoveTickable(ITickable tickable)
+    {
+        tickablesToRemove.Add(tickable);
     }
 
     public Vector2 Constrain(Vector2 pos, float radius)

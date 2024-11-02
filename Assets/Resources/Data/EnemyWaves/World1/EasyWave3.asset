@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: EasyWave3
   m_EditorClassIdentifier: 
   initialEnemies:
-  - slot: 0
-    enemy: {fileID: 11400000, guid: f8fdef8cdd196d042b9c400ab47fe1f4, type: 2}
-  - slot: 1
-    enemy: {fileID: 11400000, guid: cc84805653dbadd46bf1066926470b2f, type: 2}
+  - {fileID: 11400000, guid: d9353d291e0e6074ca8cf51ede1bf60b, type: 2}
+  - {fileID: 11400000, guid: cc84805653dbadd46bf1066926470b2f, type: 2}
   delayedEnemies: []

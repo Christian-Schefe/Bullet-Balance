@@ -17,8 +17,8 @@ public class InventoryWindow : MonoBehaviour, IWindow
 
     private void Awake()
     {
-        DataManger.InventoryData.hazardLevelsStore.AddSceneListener(OnHazardsChanged);
-        DataManger.InventoryData.artifactsStore.AddSceneListener(OnArtifactChanged);
+        DataManager.InventoryData.hazardLevelsStore.AddSceneListener(OnHazardsChanged);
+        DataManager.InventoryData.artifactsStore.AddSceneListener(OnArtifactChanged);
     }
 
     public void SetOpen(bool open)

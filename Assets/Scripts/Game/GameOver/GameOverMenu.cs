@@ -13,7 +13,7 @@ public class GameOverMenu : MonoBehaviour
 
     private void Awake()
     {
-        var runState = DataManger.RunData.RunState;
+        var runState = DataManager.RunData.RunState;
         sceneTitle.text = runState == RunState.Win ? "You Win!" : "Game Over";
 
         restartButton.AddClickListener(OnPressRestart);

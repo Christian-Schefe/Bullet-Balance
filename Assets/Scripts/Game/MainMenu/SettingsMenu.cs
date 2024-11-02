@@ -9,12 +9,12 @@ public class SettingsMenu : MonoBehaviour
 
     private void Awake()
     {
-        print("Music volume: " + DataManger.SettingsData.MusicVolume);
-        print("Sfx volume: " + DataManger.SettingsData.SfxVolume);
-        musicVolumeSlider.SetProgress(DataManger.SettingsData.MusicVolume);
+        print("Music volume: " + DataManager.SettingsData.MusicVolume);
+        print("Sfx volume: " + DataManager.SettingsData.SfxVolume);
+        musicVolumeSlider.SetProgress(DataManager.SettingsData.MusicVolume);
         musicVolumeSlider.onProgressChanged.AddListener(OnMusicVolumeChanged);
 
-        sfxVolumeSlider.SetProgress(DataManger.SettingsData.SfxVolume);
+        sfxVolumeSlider.SetProgress(DataManager.SettingsData.SfxVolume);
         sfxVolumeSlider.onProgressChanged.AddListener(OnSfxVolumeChanged);
 
         resetButton.AddClickListener(ResetSettings);
@@ -22,18 +22,18 @@ public class SettingsMenu : MonoBehaviour
 
     private void OnMusicVolumeChanged(float volume)
     {
-        DataManger.SettingsData.MusicVolume = Mathf.Clamp01(volume);
+        DataManager.SettingsData.MusicVolume = Mathf.Clamp01(volume);
     }
 
     private void OnSfxVolumeChanged(float volume)
     {
-        DataManger.SettingsData.SfxVolume = Mathf.Clamp01(volume);
+        DataManager.SettingsData.SfxVolume = Mathf.Clamp01(volume);
     }
 
     private void ResetSettings()
     {
-        DataManger.SettingsData.Reset();
-        musicVolumeSlider.SetProgress(DataManger.SettingsData.MusicVolume);
-        sfxVolumeSlider.SetProgress(DataManger.SettingsData.SfxVolume);
+        DataManager.SettingsData.Reset();
+        musicVolumeSlider.SetProgress(DataManager.SettingsData.MusicVolume);
+        sfxVolumeSlider.SetProgress(DataManager.SettingsData.SfxVolume);
     }
 }

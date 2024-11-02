@@ -8,8 +8,10 @@ public class MeleeEnemy : Enemy
     {
     }
 
-    public override void DoAttackAnimation(Vector3 target)
+    public override float DoAttackAnimation(Vector3 target)
     {
-        entity.AnimateMeleeAttack(target);
+        var duration = 0.3f;
+        entity.AnimateMeleeAttack(target, duration);
+        return duration;
     }
 }

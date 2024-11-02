@@ -37,29 +37,4 @@ public abstract class ArtifactObject : ScriptableObject, IRegistryObject
     {
         return damage;
     }
-
-    public virtual int CalculateArtifactPrice(int price)
-    {
-        return price;
-    }
-
-    public virtual int CalculateHazardPrice(int price)
-    {
-        return price;
-    }
-
-    public virtual int CalculateHealPrice(int price)
-    {
-        return price;
-    }
-
-    public virtual int CalculateHealAmount(int amount)
-    {
-        return amount;
-    }
-
-    public virtual float CalculateGoldSpawnRate(float rate)
-    {
-        return rate;
-    }
 }

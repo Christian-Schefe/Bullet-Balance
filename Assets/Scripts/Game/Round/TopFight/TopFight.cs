@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Tweenables;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class TopFight : MonoBehaviour
@@ -10,7 +11,9 @@ public class TopFight : MonoBehaviour
     [SerializeField] private DamageNumber damageNumberPrefab;
     [SerializeField] private EnemyEntity enemyEntityPrefab;
     [SerializeField] private Arena arena;
+
     [SerializeField] private int slotCount;
+    [SerializeField] private float cycleTime;
 
     [SerializeField] private Transform fromPos, toPos;
     [SerializeField] private Transform playerTarget;
@@ -20,12 +23,12 @@ public class TopFight : MonoBehaviour
     private Enemy[] enemies;
     private EnemyWave enemyWave;
 
-    private float lastShiftTime;
+    private float lastCycleTime;
 
     private void Start()
     {
         enemies = new Enemy[slotCount];
-        var nodeType = DataManger.MapData.CurrentNodeInfo.nodeType;
+        var nodeType = DataManager.MapData.CurrentNodeInfo.nodeType;
 
         var waveType = nodeType switch
         {
@@ -51,38 +54,15 @@ public class TopFight : MonoBehaviour
 
     public void Tick(float time, out bool hasPlayerWon)
     {
-        var timeSinceLastShift = time - lastShiftTime;
+        var timeSinceLastCycle = time - lastCycleTime;
 
-        if (timeSinceLastShift >= 5)
+        if (timeSinceLastCycle >= cycleTime)
         {
-            lastShiftTime += timeSinceLastShift;
-            ShiftEnemies(out var notShiftedEnemies);
-            StartCoroutine(DoEnemyAttacks(notShiftedEnemies));
-        }
-
-        if (CanSpawnEnemy() && enemyWave.TrySpawn(time, out var data))
-        {
-            var enemy = Instantiate(enemyEntityPrefab, transform);
-            enemy.transform.position = fromPos.position;
-            enemies[^1] = data.CreateEnemy(enemy);
-            enemy.AnimateSpawn(0.5f);
+            lastCycleTime += timeSinceLastCycle;
+            StartCoroutine(DoCycle(time));
         }
 
         hasPlayerWon = enemyWave.IsEmpty && enemies.All(e => e == null);
-    }
-
-    private IEnumerator DoEnemyAttacks(List<int> enemies)
-    {
-        foreach (var i in enemies)
-        {
-            var enemy = this.enemies[i];
-            var attackType = enemy.AttackType;
-            if (i != 0 && attackType != EnemyAttackType.Ranged) continue;
-            AttackPlayer(enemy.CalculateDamage());
-            enemy.DoAttackAnimation(playerTarget.transform.position);
-
-            yield return new WaitForSeconds(0.1f);
-        }
     }
 
     private bool CanSpawnEnemy() => enemies[^1] == null;
@@ -91,26 +71,7 @@ public class TopFight : MonoBehaviour
     {
         if (enemies[i] == null) return;
         float progress = 1 - i / (float)(enemies.Length - 1);
-        var delay = instant ? 0 : 0.1f * i;
-        enemies[i].AnimateMove(Vector3.Lerp(fromPos.position, toPos.position, progress), delay, instant);
-    }
-
-    private void ShiftEnemies(out List<int> notShiftedEnemies)
-    {
-        notShiftedEnemies = new List<int>();
-
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (enemies[i] == null) continue;
-
-            if (i > 0 && enemies[i - 1] == null)
-            {
-                enemies[i - 1] = enemies[i];
-                enemies[i] = null;
-                UpdateEnemyPosition(i - 1, false);
-            }
-            else notShiftedEnemies.Add(i);
-        }
+        enemies[i].AnimateMove(Vector3.Lerp(fromPos.position, toPos.position, progress), 0, instant);
     }
 
     public void DealDamageFront(int damage)
@@ -183,4 +144,78 @@ public class TopFight : MonoBehaviour
 
         SfxSystem.PlaySfx(enemyHitSound);
     }
+
+    private IEnumerator DoCycle(float time)
+    {
+        for (int i = 0; i < slotCount; i++)
+        {
+            var enemy = enemies[i];
+            if (enemy == null) continue;
+
+            bool canMove = CanMove(i, out var targetIndex);
+            bool canMeleeAttack = i == 0;
+            var action = enemy.DoCycle(canMove, canMeleeAttack);
+
+            if (action == EnemyAction.Move)
+            {
+                DoMove(i, targetIndex);
+            }
+            else if (action == EnemyAction.Attack)
+            {
+                var animDuration = enemy.DoAttackAnimation(playerTarget.transform.position);
+                this.RunDelayed(() =>
+                {
+                    AttackPlayer(enemy.CalculateDamage());
+                }, animDuration);
+            }
+            else if (action != null && action != EnemyAction.Idle)
+            {
+                throw new System.ArgumentException();
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        if (CanSpawnEnemy() && enemyWave.TrySpawn(time, out var data))
+        {
+            var enemy = Instantiate(enemyEntityPrefab, transform);
+            enemy.transform.position = fromPos.position;
+            enemies[^1] = data.CreateEnemy(enemy);
+            enemy.AnimateSpawn(0.0f);
+        }
+    }
+
+    private void DoMove(int index, int targetIndex)
+    {
+        if (enemies[index] == null || enemies[targetIndex] != null) throw new System.ArgumentException();
+
+        var enemy = enemies[index];
+        enemies[targetIndex] = enemy;
+        enemies[index] = null;
+
+        float progress = 1 - targetIndex / (float)(enemies.Length - 1);
+        var pos = Vector3.Lerp(fromPos.position, toPos.position, progress);
+        enemy.AnimateMove(pos, 0, false);
+    }
+
+    private bool CanMove(int index, out int targetIndex)
+    {
+        int canSkip = 1;
+        targetIndex = index - 1;
+        while (targetIndex >= 0 && canSkip >= 0)
+        {
+            if (enemies[targetIndex] == null) return true;
+            targetIndex--;
+            canSkip--;
+        }
+        return false;
+    }
+}
+
+public enum EnemyAction
+{
+    Idle,
+    Spawn,
+    Attack,
+    Move
 }

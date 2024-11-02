@@ -23,3 +23,7 @@ MonoBehaviour:
   damage: 1
   movementType: 1
   attackType: 0
+  rangedProjectilePrefab: {fileID: 0}
+  idleCycleTime: 1
+  attackCycleTime: 5
+  moveCycleTime: 5

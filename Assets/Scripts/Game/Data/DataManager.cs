@@ -2,24 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataManger : MonoBehaviour
+public class DataManager : MonoBehaviour
 {
     [SerializeField] private int startHealth;
     [SerializeField] private int startGold;
 
-    private PersistentValue<Dictionary<string, string>> snapshotStore = new("snapshot", PersistenceMode.GlobalPersistence);
+    private readonly PersistentValue<Dictionary<string, string>> snapshotStore = new("snapshot", PersistenceMode.GlobalPersistence);
 
     private RunData runData;
     private PlayerData playerData;
     private InventoryData inventoryData;
     private SettingsData settingsData;
     private MapData mapData;
+    private StatsData statsData;
 
-    public static RunData RunData => Globals<DataManger>.Instance.GetRunData();
-    public static PlayerData PlayerData => Globals<DataManger>.Instance.GetPlayerData();
-    public static InventoryData InventoryData => Globals<DataManger>.Instance.GetInventoryData();
-    public static SettingsData SettingsData => Globals<DataManger>.Instance.GetSettingsData();
-    public static MapData MapData => Globals<DataManger>.Instance.GetMapData();
+    public static RunData RunData => Globals<DataManager>.Instance.GetRunData();
+    public static PlayerData PlayerData => Globals<DataManager>.Instance.GetPlayerData();
+    public static InventoryData InventoryData => Globals<DataManager>.Instance.GetInventoryData();
+    public static SettingsData SettingsData => Globals<DataManager>.Instance.GetSettingsData();
+    public static MapData MapData => Globals<DataManager>.Instance.GetMapData();
+    public static StatsData StatsData => Globals<DataManager>.Instance.GetStatsData();
+
+    private static ISnapshotable[] Snapshotables => new ISnapshotable[] { MapData, PlayerData, InventoryData, StatsData };
 
     public RunData GetRunData()
     {
@@ -51,6 +55,12 @@ public class DataManger : MonoBehaviour
         return mapData;
     }
 
+    public StatsData GetStatsData()
+    {
+        statsData ??= new StatsData();
+        return statsData;
+    }
+
     public bool CanContinueRun()
     {
         return snapshotStore.TryGet(out _) && RunData.RunState == RunState.Running;
@@ -59,18 +69,20 @@ public class DataManger : MonoBehaviour
     public void CreateSnapshot()
     {
         var data = new Dictionary<string, string>();
-        MapData.CreateSnapshot(data);
-        PlayerData.CreateSnapshot(data);
-        InventoryData.CreateSnapshot(data);
+        foreach (var snapshotable in Snapshotables)
+        {
+            snapshotable.CreateSnapshot(data);
+        }
         snapshotStore.Set(data);
     }
 
     public void ContinueRun()
     {
         var data = snapshotStore.Get();
-        MapData.ApplySnapshot(data);
-        PlayerData.ApplySnapshot(data);
-        InventoryData.ApplySnapshot(data);
+        foreach (var snapshotable in Snapshotables)
+        {
+            snapshotable.ApplySnapshot(data);
+        }
     }
 
     public void StartNewRun()
@@ -80,6 +92,7 @@ public class DataManger : MonoBehaviour
         MapData.Reset();
         PlayerData.Reset(startHealth, startGold);
         InventoryData.Reset();
+        StatsData.Reset();
 
         InventoryData.AddHazard("cannon", 0);
 
@@ -125,4 +138,10 @@ public class DataManger : MonoBehaviour
         PlayerData.MaxHealth = Mathf.Max(PlayerData.MaxHealth - amount, 1);
         if (PlayerData.Health > PlayerData.MaxHealth) PlayerData.Health = PlayerData.MaxHealth;
     }
+}
+
+public interface ISnapshotable
+{
+    void CreateSnapshot(Dictionary<string, string> snapshot);
+    void ApplySnapshot(Dictionary<string, string> snapshot);
 }

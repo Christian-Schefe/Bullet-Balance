@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7663416209641378360}
   - component: {fileID: 5533964036557978187}
   m_Layer: 0
-  m_Name: ArcherArrow
+  m_Name: ThrowingStone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: -2413806693520163455, guid: c75b306f51a971c458ca6e184c2944d7, type: 3}
-  m_Color: {r: 0.7264151, g: 0.25698647, b: 0.25698647, a: 1}
+  m_Sprite: {fileID: 1581025396, guid: a5d038437c7d5fa458bd3314e938455a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

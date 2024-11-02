@@ -15,7 +15,7 @@ public class MusicSystem : MonoBehaviour
     {
         if (!Globals<MusicSystem>.RegisterOrDestroy(this)) return;
 
-        DataManger.SettingsData.musicVolumeStore.AddListener(ListenerLifetime.Global, OnMusicVolumeChanged);
+        DataManager.SettingsData.musicVolumeStore.AddListener(ListenerLifetime.Global, OnMusicVolumeChanged);
 
         currentMusicIndex = Random.Range(0, musicClipList.Count);
 

@@ -9,7 +9,7 @@ public class GoldCounter : MonoBehaviour
 
     private void Awake()
     {
-        DataManger.PlayerData.goldStore.AddListener(ListenerLifetime.Scene, OnGoldChanged);
+        DataManager.PlayerData.goldStore.AddListener(ListenerLifetime.Scene, OnGoldChanged);
     }
 
     private void OnGoldChanged(bool isPresent, int gold)

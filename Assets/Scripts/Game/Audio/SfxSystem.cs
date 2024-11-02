@@ -9,7 +9,7 @@ public class SfxSystem : MonoBehaviour
     private void Awake()
     {
         if (!Globals<SfxSystem>.RegisterOrDestroy(this)) return;
-        DataManger.SettingsData.sfxVolumeStore.AddListener(ListenerLifetime.Global, OnSfxVolumeChanged);
+        DataManager.SettingsData.sfxVolumeStore.AddListener(ListenerLifetime.Global, OnSfxVolumeChanged);
     }
 
     private void OnSfxVolumeChanged(bool isPresent, float value)

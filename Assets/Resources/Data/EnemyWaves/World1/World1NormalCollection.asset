@@ -19,3 +19,7 @@ MonoBehaviour:
     difficultyRange: {x: 0, y: 1}
   - wave: {fileID: 11400000, guid: 477f494dc203d954685f3946563e6efe, type: 2}
     difficultyRange: {x: 0, y: 1}
+  - wave: {fileID: 11400000, guid: fd792dba96a8e1b4983a9a00dd39b2c9, type: 2}
+    difficultyRange: {x: 0.4, y: 1}
+  - wave: {fileID: 11400000, guid: 185572a1fa7b41247b8eafdd8a41ed34, type: 2}
+    difficultyRange: {x: 0.4, y: 1}

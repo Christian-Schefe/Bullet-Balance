@@ -14,7 +14,7 @@ public class EventChoiceSystem : MonoBehaviour
 
     private void Start()
     {
-        rng = new SeededRandom(DataManger.MapData.CurrentNodeInfo.sceneSeed);
+        rng = new SeededRandom(DataManager.MapData.CurrentNodeInfo.sceneSeed);
         eventObject = GetRandomEvent();
 
         var choiceCount = eventObject.GetChoiceCount();

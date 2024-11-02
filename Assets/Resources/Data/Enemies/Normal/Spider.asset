@@ -10,17 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9169a0aa11efc8d46907d11cc505c68b, type: 3}
-  m_Name: Stickbug
+  m_Name: Spider
   m_EditorClassIdentifier: 
-  enemyName: Wasp
-  enemyId: wasp
+  enemyName: Spider
+  enemyId: spider
   iconSprites:
-  - {fileID: -960407260, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
-  - {fileID: 473649510, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
-  - {fileID: 2076519428, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
-  - {fileID: -1020116336, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
-  healthRange: {x: 500, y: 1000}
-  damage: 10
+  - {fileID: -1493925285, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
+  - {fileID: -176191757, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
+  - {fileID: -2131528399, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
+  - {fileID: -1300746647, guid: 00020508dd3d05744b3f0d0a6704d636, type: 3}
+  healthRange: {x: 15, y: 25}
+  damage: 2
   movementType: 1
   attackType: 0
   rangedProjectilePrefab: {fileID: 0}
+  idleCycleTime: 1
+  attackCycleTime: 5
+  moveCycleTime: 2
