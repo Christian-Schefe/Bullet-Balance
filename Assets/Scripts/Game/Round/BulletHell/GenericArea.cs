@@ -50,7 +50,7 @@ public class GenericArea : ITickable
             lastTickTime += tickDuration;
             if (projectile.IsCollidingWith(arena.Player.Collider))
             {
-                arena.TopFight.AttackPlayer(damage);
+                arena.HitPlayer(damage);
             }
             else
             {

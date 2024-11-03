@@ -50,6 +50,9 @@ MonoBehaviour:
   radius: 0.1
   arena: {fileID: 0}
   collider2d: {fileID: 1207176188020009047}
+  sprite: {fileID: 3640817396326549811}
+  idleColor: {r: 1, g: 1, b: 1, a: 1}
+  hitColor: {r: 0.85098046, g: 0.18039216, b: 0.18039216, a: 1}
 --- !u!1 &7134172461720545466
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,7 +64,7 @@ GameObject:
   - component: {fileID: 3726902989408530034}
   - component: {fileID: 3640817396326549811}
   m_Layer: 0
-  m_Name: Inner
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

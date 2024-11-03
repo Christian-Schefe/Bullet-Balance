@@ -18,6 +18,16 @@ public abstract class ObjectRegistry<T> : ScriptableObject where T : ScriptableO
         }
     }
 
+    public bool TryLookup(string id, out T obj)
+    {
+        if (objectsById == null)
+        {
+            GenerateDictionary();
+        }
+
+        return objectsById.TryGetValue(id, out obj);
+    }
+
     public T Lookup(string id)
     {
         if (objectsById == null)

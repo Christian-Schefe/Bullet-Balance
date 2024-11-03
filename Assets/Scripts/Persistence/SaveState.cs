@@ -180,7 +180,7 @@ public class SaveState : MonoBehaviour
             }
             else
             {
-                data[key] = new Box<T>(value);
+                throw new Exception($"Key '{key}' is not of type '{typeof(T)}'");
             }
         }
         else
@@ -188,6 +188,21 @@ public class SaveState : MonoBehaviour
             data.Add(key, new Box<T>(value));
         }
         OnUpdate(key);
+    }
+
+    public bool TrySetJson(string key, string json)
+    {
+        if (data.TryGetValue(key, out var box))
+        {
+            var type = box.GetContentType();
+            if (json.TryFromJson(type, out var obj))
+            {
+                box.SetValue(obj);
+                OnUpdate(key);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void Remove(string key)
@@ -264,7 +279,9 @@ public class SaveState : MonoBehaviour
 
     private interface IBox
     {
+        public Type GetContentType();
         public object GetValue();
+        public void SetValue(object value);
     }
 
     public class Box<T> : IBox
@@ -276,9 +293,19 @@ public class SaveState : MonoBehaviour
             this.value = value;
         }
 
+        public Type GetContentType()
+        {
+            return typeof(T);
+        }
+
         public object GetValue()
         {
             return value;
+        }
+
+        public void SetValue(object value)
+        {
+            this.value = (T)value;
         }
     }
 

@@ -143,11 +143,11 @@ public class PlayerData : ISnapshotable
         Health = Mathf.Clamp(Health - amount, 0, MaxHealth);
     }
 
-    public void Reset(int startHealth, int startGold)
+    public void Reset()
     {
-        Health = startHealth;
-        MaxHealth = startHealth;
-        Gold = startGold;
+        Health = 100;
+        MaxHealth = 100;
+        Gold = 25;
     }
 
     public void CreateSnapshot(Dictionary<string, string> snapshot)
@@ -173,6 +173,7 @@ public class StatsData : ISnapshotable
     public readonly PersistentValue<float[]> hazardUpgradePricesStore = new("stats.hazardUpgradePrices", PersistenceMode.GlobalPersistence);
     public readonly PersistentValue<float> goldSpawnRateStore = new("stats.goldSpawnRate", PersistenceMode.GlobalPersistence);
     public readonly PersistentValue<float> healAmountStore = new("stats.healAmount", PersistenceMode.GlobalPersistence);
+    public readonly PersistentValue<float> goldPickupDistanceStore = new("stats.goldPickupDistance", PersistenceMode.GlobalPersistence);
 
     public float HealPrice
     {
@@ -210,6 +211,12 @@ public class StatsData : ISnapshotable
         set => healAmountStore.Set(value);
     }
 
+    public float GoldPickupDistance
+    {
+        get => goldPickupDistanceStore.Get();
+        set => goldPickupDistanceStore.Set(value);
+    }
+
     public void Reset()
     {
         HealPrice = 10;
@@ -218,6 +225,7 @@ public class StatsData : ISnapshotable
         HazardUpgradePrices = new float[] { 10, 20 };
         GoldSpawnRate = 0.2f;
         HealAmount = 10;
+        GoldPickupDistance = 0.25f;
     }
 
     public void CreateSnapshot(Dictionary<string, string> snapshot)
@@ -228,6 +236,7 @@ public class StatsData : ISnapshotable
         snapshot[hazardUpgradePricesStore.Key] = HazardUpgradePrices.ToJson();
         snapshot[goldSpawnRateStore.Key] = GoldSpawnRate.ToJson();
         snapshot[healAmountStore.Key] = HealAmount.ToJson();
+        snapshot[goldPickupDistanceStore.Key] = GoldPickupDistance.ToJson();
     }
 
     public void ApplySnapshot(Dictionary<string, string> snapshot)
@@ -238,6 +247,7 @@ public class StatsData : ISnapshotable
         HazardUpgradePrices = snapshot[hazardUpgradePricesStore.Key].FromJson<float[]>();
         GoldSpawnRate = snapshot[goldSpawnRateStore.Key].FromJson<float>();
         HealAmount = snapshot[healAmountStore.Key].FromJson<float>();
+        GoldPickupDistance = snapshot[goldPickupDistanceStore.Key].FromJson<float>();
     }
 }
 

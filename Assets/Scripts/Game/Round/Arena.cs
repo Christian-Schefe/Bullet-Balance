@@ -12,13 +12,8 @@ public class Arena : MonoBehaviour
     [SerializeField] private HazardRegistry hazardRegistry;
     [SerializeField] private GoldSpawner goldSpawner;
 
-    private RunManager runManager;
-    private InventoryData inventoryData;
-
     private readonly List<ITickable> tickables = new();
 
-    public Vector2 MinCorner => minCorner.position;
-    public Vector2 MaxCorner => maxCorner.position;
     public float Width => maxCorner.position.x - minCorner.position.x;
     public float Height => maxCorner.position.y - minCorner.position.y;
     public Player Player => player;
@@ -31,13 +26,11 @@ public class Arena : MonoBehaviour
 
     private bool isPauseMenuOpen, isInventoryOpen;
 
-    private readonly List<ITickable> tickablesToRemove = new();
+    private readonly List<ITickable> tickablesToAdd = new(), tickablesToRemove = new();
 
     private void Awake()
     {
         time = 0;
-        runManager = Globals<RunManager>.Instance;
-        inventoryData = DataManager.InventoryData;
         isDone = false;
         isPaused = false;
 
@@ -46,6 +39,7 @@ public class Arena : MonoBehaviour
 
         tickables.Add(player);
         tickables.Add(goldSpawner);
+        tickables.Add(topFight);
 
         SpawnHazards();
     }
@@ -54,6 +48,12 @@ public class Arena : MonoBehaviour
     {
         if (isDone || isPaused) return;
         time += Time.deltaTime;
+
+        foreach (ITickable tickable in tickablesToAdd)
+        {
+            tickables.Add(tickable);
+        }
+        tickablesToAdd.Clear();
 
         foreach (ITickable tickable in tickablesToRemove)
         {
@@ -64,19 +64,6 @@ public class Arena : MonoBehaviour
         foreach (ITickable tickable in tickables)
         {
             tickable.Tick(time);
-        }
-
-        topFight.Tick(time, out var hasPlayerWon);
-
-        if (hasPlayerWon)
-        {
-            if (DataManager.MapData.CurrentNodeInfo.nodeType == NodeType.Boss)
-            {
-                DataManager.PlayerData.HealBy(DataManager.PlayerData.MaxHealth);
-            }
-            Signals.Get<ArenaOnWinFight>().Dispatch();
-            runManager.LoadScene(SceneType.Reward);
-            isDone = true;
         }
     }
 
@@ -108,12 +95,18 @@ public class Arena : MonoBehaviour
         DataManager.AddGold(amount);
     }
 
-    public void DealDamage(int damage)
+    public void SetDone(bool playerWon)
     {
-        if (DataManager.DamagePlayer(damage))
+        if (playerWon)
         {
-            isDone = true;
+            if (DataManager.MapData.CurrentNodeInfo.nodeType == NodeType.Boss)
+            {
+                DataManager.PlayerData.HealBy(DataManager.PlayerData.MaxHealth);
+            }
+            Signals.Get<ArenaOnWinFight>().Dispatch();
+            Globals<RunManager>.Instance.LoadScene(SceneType.Reward);
         }
+        isDone = true;
     }
 
     public T CreateBulletObject<T>(T prefab) where T : MonoBehaviour
@@ -127,9 +120,20 @@ public class Arena : MonoBehaviour
         tickables.Add(tickable);
     }
 
+    public void ScheduleAddTickable(ITickable tickable)
+    {
+        tickablesToAdd.Add(tickable);
+    }
+
     public void ScheduleRemoveTickable(ITickable tickable)
     {
         tickablesToRemove.Add(tickable);
+    }
+
+    public void HitPlayer(int damage)
+    {
+        topFight.AttackPlayer(damage);
+        player.OnHit();
     }
 
     public Vector2 Constrain(Vector2 pos, float radius)

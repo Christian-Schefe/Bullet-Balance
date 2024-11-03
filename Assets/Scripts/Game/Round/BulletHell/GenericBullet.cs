@@ -57,7 +57,7 @@ public abstract class GenericBullet : ITickable
         else if (projectile.IsCollidingWith(arena.Player.Collider))
         {
             shouldDestroy = true;
-            arena.TopFight.AttackPlayer(damage);
+            arena.HitPlayer(damage);
             projectile.AnimateDestroy(0.1f, false);
         }
 

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DataManager : MonoBehaviour
 {
-    [SerializeField] private int startHealth;
-    [SerializeField] private int startGold;
+    [SerializeField] private ArtifactRegistry artifactRegistry;
+    [SerializeField] private HazardRegistry hazardRegistry;
 
     private readonly PersistentValue<Dictionary<string, string>> snapshotStore = new("snapshot", PersistenceMode.GlobalPersistence);
 
@@ -22,6 +22,9 @@ public class DataManager : MonoBehaviour
     public static SettingsData SettingsData => Globals<DataManager>.Instance.GetSettingsData();
     public static MapData MapData => Globals<DataManager>.Instance.GetMapData();
     public static StatsData StatsData => Globals<DataManager>.Instance.GetStatsData();
+
+    public static ArtifactRegistry ArtifactRegistry => Globals<DataManager>.Instance.artifactRegistry;
+    public static HazardRegistry HazardRegistry => Globals<DataManager>.Instance.hazardRegistry;
 
     private static ISnapshotable[] Snapshotables => new ISnapshotable[] { MapData, PlayerData, InventoryData, StatsData };
 
@@ -90,7 +93,7 @@ public class DataManager : MonoBehaviour
         var seed = Random.Range(int.MinValue, int.MaxValue);
         RunData.Reset(seed);
         MapData.Reset();
-        PlayerData.Reset(startHealth, startGold);
+        PlayerData.Reset();
         InventoryData.Reset();
         StatsData.Reset();
 

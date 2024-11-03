@@ -10,12 +10,14 @@ public class GoldArtifact : ArtifactObject
     [SerializeField] private int afterRoundGold;
     [SerializeField] private int afterKillGold;
     [SerializeField] private float goldSpawnRateFactor;
+    [SerializeField] private float goldPickupDistanceIncrease;
 
     public override void OnAquire()
     {
         DataManager.StatsData.ArtifactPrice *= artifactPriceFactor;
         DataManager.StatsData.HazardPrice *= hazardPriceFactor;
         DataManager.StatsData.GoldSpawnRate *= goldSpawnRateFactor;
+        DataManager.StatsData.GoldPickupDistance += goldPickupDistanceIncrease;
     }
 
     public override void OnFinishRound()

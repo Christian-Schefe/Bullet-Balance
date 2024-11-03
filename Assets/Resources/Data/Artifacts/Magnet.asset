@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c6bc7a1f7da7a34b93d6ffd1407b6d5, type: 3}
+  m_Name: Magnet
+  m_EditorClassIdentifier: 
+  artifactName: Magnet
+  tooltipDescription: Increases gold pickup range by 1 unit
+  artifactId: magnet
+  iconSprite: {fileID: 1355251274, guid: bfbd74520fe88364c8faec981e836778, type: 3}
+  artifactPriceFactor: 1
+  hazardPriceFactor: 1
+  afterRoundGold: 0
+  afterKillGold: 0
+  goldSpawnRateFactor: 1
+  goldPickupDistanceIncrease: 1

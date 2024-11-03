@@ -303,8 +303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae180fd815d0c8e45a6e6623152f6b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startHealth: 100
-  startGold: 25
+  artifactRegistry: {fileID: 11400000, guid: e0e5d3d7a60d4ca43bbeafe5f49f43fd, type: 2}
+  hazardRegistry: {fileID: 11400000, guid: 623e121b5cf2054418547ef8250a8316, type: 2}
 --- !u!1 &3873583822060533988
 GameObject:
   m_ObjectHideFlags: 0

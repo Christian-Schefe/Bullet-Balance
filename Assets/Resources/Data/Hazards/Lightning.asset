@@ -17,7 +17,7 @@ MonoBehaviour:
   - Spawns an area that deals damage over time
   - Spawns an area that deals damage over time
   - Spawns an area that deals damage over time
-  hazardId: Lightning
+  hazardId: lightning
   iconSprite: {fileID: -1670133640, guid: d31df7261db24f94f87591ffdae37aa6, type: 3}
   bulletPrefab: {fileID: 2064167461035219738, guid: cdba507dc8f222a4da5d38ce4163a09e, type: 3}
   indicatorPrefab: {fileID: 0}

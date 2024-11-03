@@ -1,11 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Tweenables;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
-public class TopFight : MonoBehaviour
+public class TopFight : MonoBehaviour, ITickable
 {
     [SerializeField] private WaveGenerator waveGenerator;
     [SerializeField] private DamageNumber damageNumberPrefab;
@@ -52,7 +50,7 @@ public class TopFight : MonoBehaviour
         }
     }
 
-    public void Tick(float time, out bool hasPlayerWon)
+    public void Tick(float time)
     {
         var timeSinceLastCycle = time - lastCycleTime;
 
@@ -62,7 +60,11 @@ public class TopFight : MonoBehaviour
             StartCoroutine(DoCycle(time));
         }
 
-        hasPlayerWon = enemyWave.IsEmpty && enemies.All(e => e == null);
+        var hasPlayerWon = enemyWave.IsEmpty && enemies.All(e => e == null);
+        if (hasPlayerWon)
+        {
+            arena.SetDone(true);
+        }
     }
 
     private bool CanSpawnEnemy() => enemies[^1] == null;
@@ -123,7 +125,10 @@ public class TopFight : MonoBehaviour
 
     public void AttackPlayer(int damage)
     {
-        arena.DealDamage(damage);
+        if (DataManager.DamagePlayer(damage))
+        {
+            arena.SetDone(false);
+        }
         var damageNumber = Instantiate(damageNumberPrefab, transform);
         damageNumber.DisplayDamage(playerTarget, damage, true);
 

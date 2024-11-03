@@ -657,11 +657,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arena: {fileID: 623622131}
-  goldPrefab: {fileID: 7890043908907465049, guid: dff452bc71073224ca99a68fb97f794f, type: 3}
-  pickupDistance: 0.5
+  goldPrefab: {fileID: 2777411941102350255, guid: dff452bc71073224ca99a68fb97f794f, type: 3}
   goldRadius: 0.2
-  maxGoldCount: 3
-  collectGoldSound: {fileID: 8300000, guid: 21aad3a3d597e4d4d86456177db2bb6f, type: 3}
 --- !u!1 &738228716
 GameObject:
   m_ObjectHideFlags: 0
